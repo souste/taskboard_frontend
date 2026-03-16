@@ -3,8 +3,33 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
 
+type SafeUser = {
+  id: string;
+  email: string;
+  username: string;
+};
+
+type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
+type ApiError = {
+  error: string;
+};
+
+type LoginResponse = {
+  success: boolean;
+  message?: string;
+  errors?: ApiError;
+  data?: {
+    user: SafeUser;
+    token: string;
+  };
+};
+
 export default function Login() {
-  const [loginCredentials, setLoginCredentials] = useState({ email: "", password: "" });
+  const [loginCredentials, setLoginCredentials] = useState<LoginCredentials>({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -19,16 +44,19 @@ export default function Login() {
     setIsSubmitting(true);
     setError("");
     try {
-      const response = await login(loginCredentials);
-      console.log(response);
-      if (response.errors) {
-        setError(response.errors.error || "Login failed");
-        setIsSubmitting(false);
+      const response: LoginResponse = await login(loginCredentials);
+
+      if (!response.success) {
+        setError(response.message || response.errors?.error || "Login failed");
         return;
       }
       navigate("/");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Login failed");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -48,7 +76,7 @@ export default function Login() {
           value={loginCredentials.password}
           placeholder="password"
         />
-        <button>{isSubmitting ? "Loggin in" : "Login"}</button>
+        <button>{isSubmitting ? "Logging in..." : "Login"}</button>
       </form>
     </>
   );

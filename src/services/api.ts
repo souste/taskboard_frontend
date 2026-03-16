@@ -31,3 +31,31 @@ export const login = async (loginData: LoginData) => {
     return { errors: { error: "Network error. Please try again" } };
   }
 };
+
+interface SignupData {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export const signup = async (signupData: SignupData) => {
+  try {
+    const response = await fetch(`${API_BASE}/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(signupData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        errors: { error: result.message || "Signup failed" },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error("Signup error", err);
+    return { errors: { error: "Network error. Please try again" } };
+  }
+};
