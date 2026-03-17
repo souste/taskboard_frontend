@@ -1,11 +1,8 @@
+import type { LoginData, LoginResponse, SignupData, SignupResponse, MeResponse } from "../types/auth.types";
+
 const API_BASE = "http://localhost:3000";
 
-interface LoginData {
-  email: string;
-  password: string;
-}
-
-export const login = async (loginData: LoginData) => {
+export const login = async (loginData: LoginData): Promise<LoginResponse> => {
   try {
     const response = await fetch(`${API_BASE}/auth/login`, {
       method: "POST",
@@ -32,13 +29,7 @@ export const login = async (loginData: LoginData) => {
   }
 };
 
-interface SignupData {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export const signup = async (signupData: SignupData) => {
+export const signup = async (signupData: SignupData): Promise<SignupResponse> => {
   try {
     const response = await fetch(`${API_BASE}/auth/signup`, {
       method: "POST",
@@ -58,4 +49,31 @@ export const signup = async (signupData: SignupData) => {
     console.error("Signup error", err);
     return { errors: { error: "Network error. Please try again" } };
   }
+};
+
+export const getMe = async (): Promise<MeResponse> => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return {
+      success: false,
+      errors: { error: "No token" },
+    };
+  }
+
+  const response = await fetch(`${API_BASE}/auth/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: { error: result.message || "Token invalid" },
+    };
+  }
+  return result;
 };

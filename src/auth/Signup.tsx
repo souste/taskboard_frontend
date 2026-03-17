@@ -2,31 +2,10 @@ import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../services/api";
-
-type SignupCredentials = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-type ApiError = {
-  error: string;
-};
-
-type SignupResponse = {
-  success: boolean;
-  message?: string;
-  errors?: ApiError;
-  data: {
-    id: number;
-    username: string;
-    email: string;
-    created_at: string;
-  };
-};
+import type { SignupData, SignupResponse } from "../types/auth.types";
 
 export default function Signup() {
-  const [signupCredentials, setSignupCredentials] = useState<SignupCredentials>({
+  const [signupCredentials, setSignupCredentials] = useState<SignupData>({
     username: "",
     email: "",
     password: "",

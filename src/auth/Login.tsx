@@ -2,34 +2,10 @@ import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
-
-type SafeUser = {
-  id: string;
-  email: string;
-  username: string;
-};
-
-type LoginCredentials = {
-  email: string;
-  password: string;
-};
-
-type ApiError = {
-  error: string;
-};
-
-type LoginResponse = {
-  success: boolean;
-  message?: string;
-  errors?: ApiError;
-  data?: {
-    user: SafeUser;
-    token: string;
-  };
-};
+import type { LoginData, LoginResponse } from "../types/auth.types";
 
 export default function Login() {
-  const [loginCredentials, setLoginCredentials] = useState<LoginCredentials>({ email: "", password: "" });
+  const [loginCredentials, setLoginCredentials] = useState<LoginData>({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
