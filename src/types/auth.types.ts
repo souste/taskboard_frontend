@@ -25,14 +25,7 @@ export type MeResponse = ApiResponse<{
   user: SafeUser;
 }>;
 
-export type LoginResponse = ApiResponse<{
+export type AuthSuccessPayload = {
   user: SafeUser;
   token: string;
-}>;
-
-export type SignupResponse = ApiResponse<{
-  id: number;
-  username: string;
-  email: string;
-  created_at: string;
-}>;
+};

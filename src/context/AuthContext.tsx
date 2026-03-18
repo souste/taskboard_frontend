@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMe, login as loginRequest } from "../services/api";
+import { getMe, login as loginRequest, signup as singupRequest } from "../services/api";
 import type { SafeUser } from "../types/auth.types";
 
 type AuthContextType = {
   user: SafeUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
+  signup: (username: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
   refreshUser: () => Promise<boolean>;
 };
@@ -35,6 +36,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     };
     loadUser();
   }, []);
+
+  const signup = async (username: string, email: string, password: string) => {
+    const res = await singupRequest({ username, email, password });
+
+    if (!res.success || !res.data?.token) {
+      return false;
+    }
+  };
 
   const login = async (email: string, password: string) => {
     const res = await loginRequest({ email, password });
@@ -69,7 +78,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return true;
   };
 
-  return <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, refreshUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

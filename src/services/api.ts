@@ -1,8 +1,8 @@
-import type { LoginData, LoginResponse, SignupData, SignupResponse, MeResponse } from "../types/auth.types";
+import type { LoginData, SignupData, AuthSuccessPayload, MeResponse, ApiResponse } from "../types/auth.types";
 
 const API_BASE = "http://localhost:3000";
 
-export const login = async (loginData: LoginData): Promise<LoginResponse> => {
+export const login = async (loginData: LoginData): Promise<ApiResponse<AuthSuccessPayload>> => {
   try {
     const response = await fetch(`${API_BASE}/auth/login`, {
       method: "POST",
@@ -15,13 +15,11 @@ export const login = async (loginData: LoginData): Promise<LoginResponse> => {
 
     if (!response.ok) {
       return {
+        success: false,
         errors: { error: result.message || "Login failed" },
       };
     }
-    if (result.data?.token) {
-      localStorage.setItem("token", result.data.token);
-      localStorage.setItem("user", JSON.stringify(result.data.user));
-    }
+
     return result;
   } catch (err) {
     console.error("Login error", err);
@@ -29,7 +27,7 @@ export const login = async (loginData: LoginData): Promise<LoginResponse> => {
   }
 };
 
-export const signup = async (signupData: SignupData): Promise<SignupResponse> => {
+export const signup = async (signupData: SignupData): Promise<ApiResponse<AuthSuccessPayload>> => {
   try {
     const response = await fetch(`${API_BASE}/auth/signup`, {
       method: "POST",
@@ -41,6 +39,7 @@ export const signup = async (signupData: SignupData): Promise<SignupResponse> =>
 
     if (!response.ok) {
       return {
+        success: false,
         errors: { error: result.message || "Signup failed" },
       };
     }
