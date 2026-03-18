@@ -43,7 +43,7 @@ export default function Login() {
           value={loginCredentials.password}
           placeholder="password"
         />
-        <button>{isSubmitting ? "Logging in..." : "Login"}</button>
+        <button disabled={isSubmitting}>{isSubmitting ? "Logging in..." : "Login"}</button>
       </form>
     </>
   );

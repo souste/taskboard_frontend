@@ -1,11 +1,10 @@
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signup } from "../services/api";
-import type { SignupData, SignupResponse } from "../types/auth.types";
+import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
-  const [signupCredentials, setSignupCredentials] = useState<SignupData>({
+  const [signupCredentials, setSignupCredentials] = useState({
     username: "",
     email: "",
     password: "",
@@ -13,6 +12,7 @@ export default function Signup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -23,22 +23,14 @@ export default function Signup() {
     event.preventDefault();
     setIsSubmitting(true);
     setError("");
-    try {
-      const response: SignupResponse = await signup(signupCredentials);
-      if (!response.success) {
-        setError(response.message || response.errors?.error || "Signup failed");
-        return;
-      }
-      navigate("/login");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Login failed");
-      }
-    } finally {
+
+    const success = await signup(signupCredentials.username, signupCredentials.email, signupCredentials.password);
+    if (!success) {
+      setError("Invalid credentials");
       setIsSubmitting(false);
+      return;
     }
+    navigate("/");
   };
   return (
     <>
@@ -60,7 +52,7 @@ export default function Signup() {
           value={signupCredentials.password}
           placeholder="password"
         />
-        <button>{isSubmitting ? "Signing up..." : "Signup"}</button>
+        <button disabled={isSubmitting}>{isSubmitting ? "Signing up..." : "Signup"}</button>
       </form>
     </>
   );

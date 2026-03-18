@@ -40,9 +40,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const signup = async (username: string, email: string, password: string) => {
     const res = await singupRequest({ username, email, password });
 
-    if (!res.success || !res.data?.token) {
+    if (!res.success || !res.data || !res.data?.token) {
       return false;
     }
+    localStorage.setItem("token", res.data.token);
+
+    const me = await getMe();
+    if (me.success && me.data?.user) {
+      setUser(me.data.user);
+      return true;
+    }
+    return false;
   };
 
   const login = async (email: string, password: string) => {

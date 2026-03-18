@@ -23,7 +23,7 @@ export const login = async (loginData: LoginData): Promise<ApiResponse<AuthSucce
     return result;
   } catch (err) {
     console.error("Login error", err);
-    return { errors: { error: "Network error. Please try again" } };
+    return { success: false, errors: { error: "Network error. Please try again" } };
   }
 };
 
@@ -46,7 +46,7 @@ export const signup = async (signupData: SignupData): Promise<ApiResponse<AuthSu
     return result;
   } catch (err) {
     console.error("Signup error", err);
-    return { errors: { error: "Network error. Please try again" } };
+    return { success: false, errors: { error: "Network error. Please try again" } };
   }
 };
 
