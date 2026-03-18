@@ -61,7 +61,7 @@ export const getMe = async (): Promise<MeResponse> => {
     };
   }
 
-  const response = await fetch(`${API_BASE}/auth/auth/me`, {
+  const response = await fetch(`${API_BASE}/auth/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

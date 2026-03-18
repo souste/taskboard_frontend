@@ -1,14 +1,14 @@
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/api";
-import type { LoginData, LoginResponse } from "../types/auth.types";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const [loginCredentials, setLoginCredentials] = useState<LoginData>({ email: "", password: "" });
+  const [loginCredentials, setLoginCredentials] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -19,23 +19,14 @@ export default function Login() {
     event.preventDefault();
     setIsSubmitting(true);
     setError("");
-    try {
-      const response: LoginResponse = await login(loginCredentials);
 
-      if (!response.success) {
-        setError(response.message || response.errors?.error || "Login failed");
-        return;
-      }
-      navigate("/");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Login failed");
-      }
-    } finally {
+    const success = await login(loginCredentials.email, loginCredentials.password);
+    if (!success) {
+      setError("Invalid credentials");
       setIsSubmitting(false);
+      return;
     }
+    navigate("/");
   };
 
   return (
