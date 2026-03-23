@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMe, login as loginRequest, signup as singupRequest } from "../services/api";
+import { getMe, login as loginRequest, signup as singupRequest } from "../api/auth";
 import type { SafeUser } from "../types/auth.types";
 
 type AuthContextType = {

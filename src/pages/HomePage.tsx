@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMe } from "../services/api";
+import { getMe } from "../api/auth";
 import type { SafeUser } from "../types/auth.types";
 
 export default function HomePage() {
