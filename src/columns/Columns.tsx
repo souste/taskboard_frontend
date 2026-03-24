@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import TaskList from "../tasks/TaskList";
 import { getColumns } from "../api/column";
 
 type Column = {
@@ -45,7 +46,7 @@ export default function Columns() {
       {columns.map((column) => (
         <div key={column.id} className="columns-container">
           <h2>{column.name}</h2>
-          <p>tasks go here</p>
+          <TaskList columnId={column.id} />
         </div>
       ))}
     </>
