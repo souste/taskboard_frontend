@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { getColumns } from "../api/column";
 
-type Columns = {
+type Column = {
   id: number;
   user_id: number;
   name: string;
@@ -9,11 +10,44 @@ type Columns = {
 };
 
 export default function Columns() {
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState<Column[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchColumns = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const result = await getColumns();
+        if (result.errors) {
+          setError(result.errors.error);
+          setColumns([]);
+        } else {
+          setColumns(result.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch columns", err);
+        setError("Failed to fetch columns");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchColumns();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <>
-      <h2>Columns</h2>
+      {columns.map((column) => (
+        <div key={column.id} className="columns-container">
+          <h2>{column.name}</h2>
+          <p>tasks go here</p>
+        </div>
+      ))}
     </>
   );
 }
