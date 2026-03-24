@@ -52,7 +52,7 @@ export default function TaskList({ columnId }: TaskListProps) {
       {tasks
         .filter((task) => task.column_id === columnId)
         .map((task) => (
-          <div key={task.id} className="tasks-container">
+          <div key={task.id}>
             <h3>{task.title}</h3>
             <p>{task.description}</p>
           </div>

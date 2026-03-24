@@ -4,7 +4,6 @@ import SingleBoard from "./boards/pages/SingleBoard";
 import Signup from "./auth/Signup";
 import Login from "./auth/Login";
 import NavBar from "./components/NavBar";
-import "./App.css";
 
 function App() {
   return (
