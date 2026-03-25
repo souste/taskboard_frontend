@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getMe } from "../api/auth";
-import type { SafeUser } from "../types/auth.types";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getMe } from '../api/auth';
+import type { SafeUser } from '../types/auth.types';
 
 export default function HomePage() {
   const [user, setUser] = useState<SafeUser | null>(null);
@@ -19,10 +19,11 @@ export default function HomePage() {
 
   return (
     <>
-      <h1>Welcome to the Taskboard</h1>
-      <h1 className="text-3xl font-bold text-blue-500">Tailwind is working!</h1>
-      <p>Welcome {user?.email} </p>
-      <button onClick={() => navigate("/board")}>To Board</button>
+      <h1 className="text-center text-xl font-semibold text-yellow-500">
+        Welcome to the Taskboard
+      </h1>
+      <p>Welcome {user?.email}</p>
+      <button onClick={() => navigate('/board')}>To Board</button>
     </>
   );
 }

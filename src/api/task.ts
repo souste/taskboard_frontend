@@ -16,16 +16,20 @@ type TaskData = {
   updated_at: string;
 };
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = 'http://localhost:3000';
 
 export const getTasks = async (): Promise<ApiResponse<TaskData[]>> => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
 
     const response = await fetch(`${API_BASE}/tasks`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
@@ -39,7 +43,41 @@ export const getTasks = async (): Promise<ApiResponse<TaskData[]>> => {
     }
     return result;
   } catch (err) {
-    console.error("Failed to retrieve tasks");
-    return { success: false, message: "Network error. Please try again" };
+    console.error('Failed to retrieve tasks', err);
+    return { success: false, message: 'Network error. Please try again' };
+  }
+};
+
+export const getTask = async (
+  taskId: number,
+): Promise<ApiResponse<TaskData>> => {
+  try {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error('Failed to retrieve task');
+      return {
+        success: false,
+        message: result.message ?? 'Failed to retrieve task',
+        errors: { error: result.message },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to retrieve task', err);
+    return { success: false, message: 'Network error. Please try again' };
   }
 };

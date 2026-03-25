@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import TaskList from "../tasks/TaskList";
-import { getColumns } from "../api/column";
+import { useState, useEffect } from 'react';
+import TaskList from '../tasks/TaskList';
+import { getColumns } from '../api/column';
 
 type Column = {
   id: number;
@@ -13,13 +13,13 @@ type Column = {
 export default function Columns() {
   const [columns, setColumns] = useState<Column[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchColumns = async () => {
       try {
         setLoading(true);
-        setError("");
+        setError('');
 
         const result = await getColumns();
         if (result.errors) {
@@ -29,8 +29,8 @@ export default function Columns() {
           setColumns(result.data || []);
         }
       } catch (err) {
-        console.error("Failed to fetch columns", err);
-        setError("Failed to fetch columns");
+        console.error('Failed to fetch columns', err);
+        setError('Failed to fetch columns');
       } finally {
         setLoading(false);
       }
@@ -44,8 +44,8 @@ export default function Columns() {
   return (
     <>
       {columns.map((column) => (
-        <div key={column.id} className="columns-container">
-          <h2>{column.name}</h2>
+        <div key={column.id} className="bg-gray-300">
+          <h2 className="font-bold">{column.name}</h2>
           <TaskList columnId={column.id} />
         </div>
       ))}

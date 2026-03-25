@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { getTasks } from "../api/task";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { getTasks } from '../api/task';
 
 type Task = {
   id: number;
@@ -19,13 +20,13 @@ type TaskListProps = {
 export default function TaskList({ columnId }: TaskListProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState('');
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        setErrors("");
+        setErrors('');
 
         const result = await getTasks();
         if (result.errors) {
@@ -35,8 +36,8 @@ export default function TaskList({ columnId }: TaskListProps) {
           setTasks(result.data || []);
         }
       } catch (err) {
-        console.error("Failed to fetch tasks", err);
-        setErrors("Failed to fetch tasks");
+        console.error('Failed to fetch tasks', err);
+        setErrors('Failed to fetch tasks');
       } finally {
         setLoading(false);
       }
@@ -52,10 +53,10 @@ export default function TaskList({ columnId }: TaskListProps) {
       {tasks
         .filter((task) => task.column_id === columnId)
         .map((task) => (
-          <div key={task.id}>
+          <Link key={task.id} className="bg-gray-100" to={`/tasks/${task.id}`}>
             <h3>{task.title}</h3>
             <p>{task.description}</p>
-          </div>
+          </Link>
         ))}
     </div>
   );
