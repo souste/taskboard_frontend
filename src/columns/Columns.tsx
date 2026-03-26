@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import TaskList from '../tasks/TaskList';
+import ColumnForm from './ColumnForm';
 import { getColumns } from '../api/column';
 
 type Column = {
@@ -49,6 +50,7 @@ export default function Columns() {
           <TaskList columnId={column.id} />
         </div>
       ))}
+      <ColumnForm setColumns={setColumns} />
     </>
   );
 }
