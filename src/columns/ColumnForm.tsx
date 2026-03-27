@@ -8,7 +8,18 @@ type Values = {
   position: number | null;
 };
 
-export default function ColumnForm({ setColumns }) {
+type Column = {
+  id: number;
+  user_id: number;
+  name: string;
+  position: number;
+  created_at: string;
+};
+type ColumnFormProps = {
+  setColumns: React.Dispatch<React.SetStateAction<Column[]>>;
+};
+
+export default function ColumnForm({ setColumns }: ColumnFormProps) {
   const [values, setValues] = useState<Values>({
     name: '',
     position: null,
@@ -18,9 +29,10 @@ export default function ColumnForm({ setColumns }) {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    const field = name as keyof Values;
     setValues((prev) => ({
       ...prev,
-      [name]: name === 'position' ? Number(value) : value,
+      [field]: field === 'position' ? Number(value) : value,
     }));
   };
 
@@ -35,7 +47,11 @@ export default function ColumnForm({ setColumns }) {
       return;
     }
 
-    const success = await createColumn(values);
+    const payload: { name: string; position: number } = {
+      name: values.name,
+      position: values.position,
+    };
+    const success = await createColumn(payload);
 
     if (!success) {
       setError('Invalid credentials');

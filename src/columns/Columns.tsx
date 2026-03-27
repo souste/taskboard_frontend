@@ -46,7 +46,7 @@ export default function Columns() {
     <>
       {columns.map((column) => (
         <div key={column.id} className="bg-gray-300">
-          <h2 className="font-bold">{column.name}</h2>
+          <p className="text-2xl font-bold uppercase">{column.name}</p>
           <TaskList columnId={column.id} />
         </div>
       ))}

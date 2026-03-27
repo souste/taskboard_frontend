@@ -22,7 +22,7 @@ export default function HomePage() {
       <h1 className="text-center text-xl font-semibold text-yellow-500">
         Welcome to the Taskboard
       </h1>
-      <p>Welcome {user?.email}</p>
+      <p className="font-bold">Welcome {user?.email}</p>
       <button onClick={() => navigate('/board')}>To Board</button>
     </>
   );
