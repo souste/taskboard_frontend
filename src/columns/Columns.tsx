@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import TaskList from '../tasks/TaskList';
 import ColumnForm from './ColumnForm';
-import { getColumns } from '../api/column';
+import { getColumns, createColumn, updateColumn } from '../api/column';
 
 type Column = {
   id: number;
@@ -9,6 +10,11 @@ type Column = {
   name: string;
   position: number;
   created_at: string;
+};
+
+type Values = {
+  name: string;
+  position: number | null;
 };
 
 export default function Columns() {
@@ -39,6 +45,18 @@ export default function Columns() {
     fetchColumns();
   }, []);
 
+  const handleCreate = async (values: Values) => {
+    await createColumn(values);
+    const result = await getColumns();
+    setColumns(result.data || []);
+  };
+
+  const handleUpdate = async (columnId: number, values: Values) => {
+    await updateColumn(columnId, values);
+    const result = await getColumns();
+    setColumns(result.data || []);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -48,9 +66,13 @@ export default function Columns() {
         <div key={column.id} className="bg-gray-300">
           <p className="text-2xl font-bold uppercase">{column.name}</p>
           <TaskList columnId={column.id} />
+          <ColumnForm
+            column={column}
+            onSubmit={(values) => handleUpdate(column.id, values)}
+          />
         </div>
       ))}
-      <ColumnForm setColumns={setColumns} />
+      <ColumnForm onSubmit={handleCreate} />
     </>
   );
 }

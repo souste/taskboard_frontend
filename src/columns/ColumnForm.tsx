@@ -1,7 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { createColumn } from '../api/column';
 import { useState } from 'react';
-import { getColumns } from '../api/column';
 
 type Values = {
   name: string;
@@ -16,15 +14,16 @@ type Column = {
   created_at: string;
 };
 type ColumnFormProps = {
-  setColumns: React.Dispatch<React.SetStateAction<Column[]>>;
+  onSubmit: (values: Values) => void;
+  column?: Column | null;
 };
 
-export default function ColumnForm({ setColumns }: ColumnFormProps) {
+export default function ColumnForm({ column, onSubmit }: ColumnFormProps) {
   const [values, setValues] = useState<Values>({
-    name: '',
-    position: null,
+    name: column?.name ?? '',
+    position: column?.position ?? null,
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [error, setError] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,30 +35,18 @@ export default function ColumnForm({ setColumns }: ColumnFormProps) {
     }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsSubmitting(true);
-    setError('');
 
     if (values.position === null) {
       setError('Position is required');
-      setIsSubmitting(false);
       return;
     }
-
-    const payload: { name: string; position: number } = {
-      name: values.name,
-      position: values.position,
-    };
-    const success = await createColumn(payload);
-
-    if (!success) {
-      setError('Invalid credentials');
-      setIsSubmitting(false);
-      return;
-    }
-    const result = await getColumns();
-    setColumns(result.data || []);
+    onSubmit(values);
+    setValues({
+      name: '',
+      position: null,
+    });
   };
   return (
     <>
@@ -69,18 +56,18 @@ export default function ColumnForm({ setColumns }: ColumnFormProps) {
         <input
           name="name"
           type="text"
+          value={values.name}
           onChange={handleChange}
           placeholder="Column name"
         />
         <input
           name="position"
           type="number"
+          value={values.position ?? ''}
           onChange={handleChange}
           placeholder="Column Position"
         />
-        <button disabled={isSubmitting}>
-          {isSubmitting ? 'Creating Column' : 'Create Column'}
-        </button>
+        <button>{column ? 'Update Column' : 'Create Column'}</button>
       </form>
     </>
   );
