@@ -16,11 +16,13 @@ type Column = {
 type ColumnFormProps = {
   onSubmit: (values: Values) => void;
   column?: Column | null;
-  setEditColumnId: (value: number | null) => void;
+  editColumnId?: number | null;
+  setEditColumnId?: (value: number | null) => void;
 };
 
 export default function ColumnForm({
   column,
+  editColumnId,
   setEditColumnId,
   onSubmit,
 }: ColumnFormProps) {
@@ -55,7 +57,7 @@ export default function ColumnForm({
       });
     }
 
-    setEditColumnId(null);
+    setEditColumnId?.(null);
   };
   return (
     <>
@@ -78,6 +80,9 @@ export default function ColumnForm({
           className="bg-white"
         />
         <button className="bg-green-500">Submit</button>
+        {column && (
+          <button onClick={() => setEditColumnId?.(null)}>Cancel</button>
+        )}
       </form>
     </>
   );

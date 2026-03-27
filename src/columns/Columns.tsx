@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import TaskList from '../tasks/TaskList';
 import ColumnForm from './ColumnForm';
-import { getColumns, createColumn, updateColumn } from '../api/column';
+import {
+  getColumns,
+  createColumn,
+  updateColumn,
+  deleteColumn,
+} from '../api/column';
 
 type Column = {
   id: number;
@@ -61,6 +66,12 @@ export default function Columns() {
     setEditColumnId(columnId);
   };
 
+  const handleDelete = async (columnId: number) => {
+    await deleteColumn(columnId);
+    const result = await getColumns();
+    setColumns(result.data || []);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -76,9 +87,16 @@ export default function Columns() {
           >
             Update
           </button>
+          <button
+            onClick={() => handleDelete(column.id)}
+            className="bg-red-500"
+          >
+            Delete
+          </button>
           {editColumnId === column.id && (
             <ColumnForm
               column={column}
+              editColumnId={editColumnId}
               setEditColumnId={setEditColumnId}
               onSubmit={(values) => handleUpdate(column.id, values)}
             />
