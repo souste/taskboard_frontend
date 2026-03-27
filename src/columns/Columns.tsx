@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import TaskList from '../tasks/TaskList';
 import ColumnForm from './ColumnForm';
 import { getColumns, createColumn, updateColumn } from '../api/column';
@@ -21,6 +20,7 @@ export default function Columns() {
   const [columns, setColumns] = useState<Column[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editColumnId, setEditColumnId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -57,6 +57,10 @@ export default function Columns() {
     setColumns(result.data || []);
   };
 
+  const handleEdit = (columnId: number) => {
+    setEditColumnId(columnId);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -66,10 +70,19 @@ export default function Columns() {
         <div key={column.id} className="bg-gray-300">
           <p className="text-2xl font-bold uppercase">{column.name}</p>
           <TaskList columnId={column.id} />
-          <ColumnForm
-            column={column}
-            onSubmit={(values) => handleUpdate(column.id, values)}
-          />
+          <button
+            onClick={() => handleEdit(column.id)}
+            className="bg-yellow-500"
+          >
+            Update
+          </button>
+          {editColumnId === column.id && (
+            <ColumnForm
+              column={column}
+              setEditColumnId={setEditColumnId}
+              onSubmit={(values) => handleUpdate(column.id, values)}
+            />
+          )}
         </div>
       ))}
       <ColumnForm onSubmit={handleCreate} />

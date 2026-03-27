@@ -16,9 +16,14 @@ type Column = {
 type ColumnFormProps = {
   onSubmit: (values: Values) => void;
   column?: Column | null;
+  setEditColumnId: (value: number | null) => void;
 };
 
-export default function ColumnForm({ column, onSubmit }: ColumnFormProps) {
+export default function ColumnForm({
+  column,
+  setEditColumnId,
+  onSubmit,
+}: ColumnFormProps) {
   const [values, setValues] = useState<Values>({
     name: column?.name ?? '',
     position: column?.position ?? null,
@@ -43,14 +48,17 @@ export default function ColumnForm({ column, onSubmit }: ColumnFormProps) {
       return;
     }
     onSubmit(values);
-    setValues({
-      name: '',
-      position: null,
-    });
+    if (!column) {
+      setValues({
+        name: '',
+        position: null,
+      });
+    }
+
+    setEditColumnId(null);
   };
   return (
     <>
-      <h3>Column Form</h3>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
@@ -59,6 +67,7 @@ export default function ColumnForm({ column, onSubmit }: ColumnFormProps) {
           value={values.name}
           onChange={handleChange}
           placeholder="Column name"
+          className="bg-white"
         />
         <input
           name="position"
@@ -66,8 +75,9 @@ export default function ColumnForm({ column, onSubmit }: ColumnFormProps) {
           value={values.position ?? ''}
           onChange={handleChange}
           placeholder="Column Position"
+          className="bg-white"
         />
-        <button>{column ? 'Update Column' : 'Create Column'}</button>
+        <button className="bg-green-500">Submit</button>
       </form>
     </>
   );
