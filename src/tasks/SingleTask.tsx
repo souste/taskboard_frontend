@@ -53,16 +53,18 @@ export default function SingleTask() {
   if (errors) return <p>{errors}</p>;
 
   return (
-    <>
-      <h1>{task?.title}</h1>
-      <p>{task?.description}</p>
-      <p>
-        {task?.created_at
-          ? new Date(task.created_at).toLocaleString()
-          : 'No date available'}
-      </p>
-      <p>Comments can go next</p>
-      <button onClick={() => navigate('/board')}>Back</button>
-    </>
+    <div className="flex justify-center">
+      <div>
+        <h1>{task?.title}</h1>
+        <p>{task?.description}</p>
+        <p>
+          {task?.created_at
+            ? new Date(task.created_at).toLocaleString()
+            : 'No date available'}
+        </p>
+        <p>Comments can go next</p>
+        <button onClick={() => navigate('/board')}>Back</button>
+      </div>
+    </div>
   );
 }

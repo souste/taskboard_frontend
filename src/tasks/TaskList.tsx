@@ -53,9 +53,12 @@ export default function TaskList({ columnId }: TaskListProps) {
       {tasks
         .filter((task) => task.column_id === columnId)
         .map((task) => (
-          <Link key={task.id} className="bg-gray-100" to={`/tasks/${task.id}`}>
-            <h3 className="font-semibold">{task.title}</h3>
-            <p>{task.description}</p>
+          <Link
+            key={task.id}
+            className="mb-5 block rounded bg-gray-100 p-3 shadow-md"
+            to={`/tasks/${task.id}`}
+          >
+            <h3 className="font-semibold wrap-break-word">{task.title}</h3>
           </Link>
         ))}
     </div>

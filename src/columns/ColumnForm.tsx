@@ -60,30 +60,35 @@ export default function ColumnForm({
     setEditColumnId?.(null);
   };
   return (
-    <>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          type="text"
-          value={values.name}
-          onChange={handleChange}
-          placeholder="Column name"
-          className="bg-white"
-        />
-        <input
-          name="position"
-          type="number"
-          value={values.position ?? ''}
-          onChange={handleChange}
-          placeholder="Column Position"
-          className="bg-white"
-        />
-        <button className="bg-green-500">Submit</button>
-        {column && (
-          <button onClick={() => setEditColumnId?.(null)}>Cancel</button>
-        )}
-      </form>
-    </>
+    <div>
+      <div className="flex flex-col">
+        {error && <p>{error}</p>}
+        <p>Create Column:</p>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <input
+              name="name"
+              type="text"
+              value={values.name}
+              onChange={handleChange}
+              placeholder="Column name"
+              className="bg-white"
+            />
+            <input
+              name="position"
+              type="number"
+              value={values.position ?? ''}
+              onChange={handleChange}
+              placeholder="Column Position"
+              className="bg-white"
+            />
+          </div>
+          <button className="bg-green-500">Submit</button>
+          {column && (
+            <button onClick={() => setEditColumnId?.(null)}>Cancel</button>
+          )}
+        </form>
+      </div>
+    </div>
   );
 }

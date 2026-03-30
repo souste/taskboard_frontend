@@ -76,34 +76,39 @@ export default function Columns() {
   if (error) return <p>{error}</p>;
 
   return (
-    <>
-      {columns.map((column) => (
-        <div key={column.id} className="bg-gray-300">
-          <p className="text-2xl font-bold uppercase">{column.name}</p>
-          <TaskList columnId={column.id} />
-          <button
-            onClick={() => handleEdit(column.id)}
-            className="bg-yellow-500"
-          >
-            Update
-          </button>
-          <button
-            onClick={() => handleDelete(column.id)}
-            className="bg-red-500"
-          >
-            Delete
-          </button>
-          {editColumnId === column.id && (
-            <ColumnForm
-              column={column}
-              editColumnId={editColumnId}
-              setEditColumnId={setEditColumnId}
-              onSubmit={(values) => handleUpdate(column.id, values)}
-            />
-          )}
-        </div>
-      ))}
-      <ColumnForm onSubmit={handleCreate} />
-    </>
+    <div className="flex justify-center">
+      <div className="flex gap-6">
+        {columns.map((column) => (
+          <div key={column.id} className="w-64 bg-gray-300 p-2">
+            <p className="mb-4 font-bold">{column.name}</p>
+            <TaskList columnId={column.id} />
+            <div className="space-x-4">
+              <button
+                onClick={() => handleEdit(column.id)}
+                className="bg-yellow-500"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => handleDelete(column.id)}
+                className="bg-red-500"
+              >
+                Delete
+              </button>
+            </div>
+            {editColumnId === column.id && (
+              <ColumnForm
+                column={column}
+                editColumnId={editColumnId}
+                setEditColumnId={setEditColumnId}
+                onSubmit={(values) => handleUpdate(column.id, values)}
+              />
+            )}
+          </div>
+        ))}
+
+        <ColumnForm onSubmit={handleCreate} />
+      </div>
+    </div>
   );
 }
