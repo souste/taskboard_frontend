@@ -63,16 +63,15 @@ export default function ColumnForm({
     <div>
       <div className="flex flex-col">
         {error && <p>{error}</p>}
-        <p>Create Column:</p>
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="mb-2 flex flex-col gap-2">
             <input
               name="name"
               type="text"
               value={values.name}
               onChange={handleChange}
               placeholder="Column name"
-              className="bg-white"
+              className="border bg-white"
             />
             <input
               name="position"
@@ -80,7 +79,7 @@ export default function ColumnForm({
               value={values.position ?? ''}
               onChange={handleChange}
               placeholder="Column Position"
-              className="bg-white"
+              className="border bg-white"
             />
           </div>
           <button className="bg-green-500">Submit</button>

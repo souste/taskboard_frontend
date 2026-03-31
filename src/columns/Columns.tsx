@@ -79,7 +79,7 @@ export default function Columns() {
     <div className="flex justify-center">
       <div className="flex gap-6">
         {columns.map((column) => (
-          <div key={column.id} className="w-64 bg-gray-300 p-2">
+          <div key={column.id} className="w-64 rounded bg-gray-300 p-2">
             <p className="mb-4 font-bold">{column.name}</p>
             <TaskList columnId={column.id} />
             <div className="space-x-4">
@@ -106,8 +106,10 @@ export default function Columns() {
             )}
           </div>
         ))}
-
-        <ColumnForm onSubmit={handleCreate} />
+        <div className="w-64 rounded bg-gray-300/30 p-2">
+          <p className="mb-2">Add another List:</p>
+          <ColumnForm onSubmit={handleCreate} />
+        </div>
       </div>
     </div>
   );

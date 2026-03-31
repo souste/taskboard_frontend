@@ -2,7 +2,7 @@ export type ApiResponse<T> = {
   success?: boolean;
   message?: string;
   errors?: { error: string };
-  data?: T;
+  data?: T | null;
 };
 
 type ColumnData = {

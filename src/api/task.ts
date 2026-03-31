@@ -2,7 +2,7 @@ export type ApiResponse<T> = {
   success?: boolean;
   message?: string;
   errors?: { error: string };
-  data?: T;
+  data?: T | null;
 };
 
 type TaskData = {
@@ -14,6 +14,12 @@ type TaskData = {
   position: number;
   created_at: string;
   updated_at: string;
+};
+
+type TaskBody = {
+  title: string;
+  description: string;
+  position: number;
 };
 
 const API_BASE = 'http://localhost:3000';
@@ -79,5 +85,107 @@ export const getTask = async (
   } catch (err) {
     console.error('Failed to retrieve task', err);
     return { success: false, message: 'Network error. Please try again' };
+  }
+};
+
+export const createTask = async (
+  taskData: TaskBody,
+): Promise<ApiResponse<TaskData | null>> => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const response = await fetch(`${API_BASE}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        errors: { error: result.message || 'Failed to create task' },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to retrieve tasks', err);
+    return { success: false, message: 'Network error. Please try again' };
+  }
+};
+
+export const updateTask = async (
+  id: number,
+  taskData: TaskBody,
+): Promise<ApiResponse<TaskData | null>> => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const response = await fetch(`${API_BASE}/tasks/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        errors: { error: result.message || 'Failed to update task' },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to update task', err);
+    return {
+      success: false,
+      errors: { error: 'Network error. Please try again' },
+    };
+  }
+};
+
+export const deleteTask = async (
+  id: number,
+): Promise<ApiResponse<TaskData | null>> => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+    const response = await fetch(`${API_BASE}/tasks/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        errors: { error: result.message || 'Failed to delete task' },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to delete column', err);
+    return {
+      success: false,
+      errors: { error: 'Network error. Please try again' },
+    };
   }
 };
