@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTask, updateTask } from '../api/task';
+import { getTask, updateTask, deleteTask } from '../api/task';
 import TaskForm from './TaskForm';
 
 type Task = {
@@ -64,6 +64,12 @@ export default function SingleTask() {
     setTask(result.data || null);
   };
 
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this task?')) return;
+    await deleteTask(id);
+    navigate('/board');
+  };
+
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
 
@@ -79,6 +85,12 @@ export default function SingleTask() {
           </button>
           <button onClick={() => setEditTask(true)} className="bg-yellow-500">
             Update
+          </button>
+          <button
+            onClick={() => task && handleDelete(task.id)}
+            className="bg-red-500"
+          >
+            Delete
           </button>
           {editTask && (
             <TaskForm
