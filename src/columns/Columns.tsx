@@ -99,7 +99,6 @@ export default function Columns() {
             {editColumnId === column.id && (
               <ColumnForm
                 column={column}
-                editColumnId={editColumnId}
                 setEditColumnId={setEditColumnId}
                 onSubmit={(values) => handleUpdate(column.id, values)}
               />

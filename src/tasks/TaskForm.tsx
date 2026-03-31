@@ -21,18 +21,22 @@ type Task = {
 
 type TaskFormProps = {
   onSubmit: (values: Values) => void;
-  task?: Task | null;
-  editTaskId?: number | null;
-  setEditTaskId?: (value: number | null) => void;
+  task: Task | null;
   columnId: number;
+  setEditTask?: (value: boolean) => void;
 };
 
-export default function TaskForm({ task, columnId, onSubmit }: TaskFormProps) {
+export default function TaskForm({
+  task,
+  setEditTask,
+  onSubmit,
+  columnId,
+}: TaskFormProps) {
   const [values, setValues] = useState<Values>({
     title: task?.title ?? '',
     description: task?.description ?? '',
     position: task?.position ?? null,
-    column_id: columnId ?? null,
+    column_id: task?.column_id ?? columnId,
   });
   const [error, setError] = useState('');
 
@@ -53,13 +57,22 @@ export default function TaskForm({ task, columnId, onSubmit }: TaskFormProps) {
       return;
     }
     onSubmit(values);
+    if (!task) {
+      setValues({
+        title: '',
+        description: '',
+        position: null,
+        column_id: columnId,
+      });
+    }
+    setEditTask?.(false);
   };
 
   return (
     <div>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="flex flex-col">
           <input
             name="title"
             type="text"
@@ -83,7 +96,7 @@ export default function TaskForm({ task, columnId, onSubmit }: TaskFormProps) {
           />
         </div>
         <button className="bg-green-500">Submit</button>
-        {task && <button>Cancel</button>}
+        <button onClick={() => setEditTask(false)}>Cancel</button>
       </form>
     </div>
   );

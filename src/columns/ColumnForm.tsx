@@ -16,13 +16,11 @@ type Column = {
 type ColumnFormProps = {
   onSubmit: (values: Values) => void;
   column?: Column | null;
-  editColumnId?: number | null;
   setEditColumnId?: (value: number | null) => void;
 };
 
 export default function ColumnForm({
   column,
-  editColumnId,
   setEditColumnId,
   onSubmit,
 }: ColumnFormProps) {
