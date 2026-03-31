@@ -20,6 +20,7 @@ type TaskBody = {
   title: string;
   description: string;
   position: number;
+  column_id: number;
 };
 
 const API_BASE = 'http://localhost:3000';

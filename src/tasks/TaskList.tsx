@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getTasks } from '../api/task';
+import TaskForm from './TaskForm';
+import { getTasks, createTask } from '../api/task';
 
 type Task = {
   id: number;
@@ -15,6 +16,12 @@ type Task = {
 
 type TaskListProps = {
   columnId: number;
+};
+
+type Values = {
+  title: string;
+  description: string;
+  position: number | null;
 };
 
 export default function TaskList({ columnId }: TaskListProps) {
@@ -45,6 +52,12 @@ export default function TaskList({ columnId }: TaskListProps) {
     fetchTasks();
   }, []);
 
+  const handleCreate = async (values: Values) => {
+    await createTask(values);
+    const result = await getTasks();
+    setTasks(result.data || []);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
 
@@ -61,6 +74,8 @@ export default function TaskList({ columnId }: TaskListProps) {
             <h3 className="font-semibold wrap-break-word">{task.title}</h3>
           </Link>
         ))}
+      <p>Add Another Task:</p>
+      <TaskForm onSubmit={handleCreate} columnId={columnId} />
     </div>
   );
 }
