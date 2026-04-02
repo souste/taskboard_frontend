@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import TaskForm from './TaskForm';
 import { getTasks, createTask } from '../api/task';
@@ -15,6 +14,8 @@ type Task = {
 };
 
 type TaskListProps = {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   columnId: number;
 };
 
@@ -24,33 +25,9 @@ type Values = {
   position: number | null;
 };
 
-export default function TaskList({ columnId }: TaskListProps) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState('');
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        setLoading(true);
-        setErrors('');
-
-        const result = await getTasks();
-        if (result.errors) {
-          setErrors(result.errors.error);
-          setTasks([]);
-        } else {
-          setTasks(result.data || []);
-        }
-      } catch (err) {
-        console.error('Failed to fetch tasks', err);
-        setErrors('Failed to fetch tasks');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTasks();
-  }, []);
+export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
+  // const [loading, setLoading] = useState(true);
+  // const [errors, setErrors] = useState('');
 
   const handleCreate = async (values: Values) => {
     await createTask(values);
@@ -58,8 +35,8 @@ export default function TaskList({ columnId }: TaskListProps) {
     setTasks(result.data || []);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (errors) return <p>{errors}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (errors) return <p>{errors}</p>;
 
   return (
     <div>
