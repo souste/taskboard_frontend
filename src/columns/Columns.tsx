@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DndContext, useDroppable } from '@dnd-kit/core';
+import { useDroppable } from '@dnd-kit/core';
 import TaskList from '../tasks/TaskList';
 import ColumnForm from './ColumnForm';
 import {
@@ -9,12 +9,43 @@ import {
   deleteColumn,
 } from '../api/column';
 
+type Column = {
+  id: number;
+  user_id: number;
+  name: string;
+  position: number;
+  created_at: string;
+};
+
+type Task = {
+  id: number;
+  user_id: number;
+  column_id: number;
+  title: string;
+  description: string;
+  position: number;
+  created_at: string;
+  updated_at: string;
+};
+
+type ColumnProps = {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  columns: Column[];
+  setColumns: React.Dispatch<React.SetStateAction<Column[]>>;
+};
+
 type Values = {
   name: string;
   position: number | null;
 };
 
-export default function Columns({ columns, setColumns, tasks, setTasks }) {
+export default function Columns({
+  columns,
+  setColumns,
+  tasks,
+  setTasks,
+}: ColumnProps) {
   const [editColumnId, setEditColumnId] = useState<number | null>(null);
 
   const handleCreate = async (values: Values) => {
@@ -51,7 +82,7 @@ export default function Columns({ columns, setColumns, tasks, setTasks }) {
             <div
               key={column.id}
               ref={setNodeRef}
-              className="w-64 rounded bg-gray-300 p-2"
+              className="min-h-[200px] w-64 rounded bg-gray-300 p-2"
             >
               <p className="mb-4 font-bold">{column.name}</p>
               <TaskList

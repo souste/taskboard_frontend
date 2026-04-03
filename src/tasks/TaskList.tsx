@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import TaskForm from './TaskForm';
+import TaskCard from './TaskCard';
 import { getTasks, createTask } from '../api/task';
 
 type Task = {
@@ -43,14 +43,9 @@ export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
       {tasks
         .filter((task) => task.column_id === columnId)
         .map((task) => (
-          <Link
-            key={task.id}
-            className="mb-3 block rounded bg-gray-100 p-3 shadow-md"
-            to={`/tasks/${task.id}`}
-          >
-            <h3 className="font-semibold wrap-break-word">{task.title}</h3>
-          </Link>
+          <TaskCard task={task} key={task.id} />
         ))}
+
       <p>Add Another Task:</p>
       <TaskForm onSubmit={handleCreate} columnId={columnId} />
     </div>

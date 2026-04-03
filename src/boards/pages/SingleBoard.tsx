@@ -1,8 +1,9 @@
 import Columns from '../../columns/Columns';
 import { useState, useEffect } from 'react';
 import { getColumns } from '../../api/column';
-import { getTasks } from '../../api/task';
-import type { DragEndEvent } from '@dnd-kit/react';
+import { getTasks, updateTask } from '../../api/task';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 
 type Column = {
   id: number;
@@ -75,38 +76,47 @@ export default function SingleBoard() {
     fetchTasks();
   }, []);
 
-  // const handleDragEnd = (event: DragEndEvent) => {
-  //   const { active, over } = event;
-  //   if (!over) return;
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
 
-  //   const taskId = active.id as string;
-  //   const newColumnId = over.id as Task['column_id'];
+    const taskId = Number(active.id);
+    const newColumnId = Number(over.id);
 
-  //   setTasks(() =>
-  //     tasks.map((task) =>
-  //       task.id === taskId
-  //         ? {
-  //             ...task,
-  //             column_id: newColumnId,
-  //             //api call here??
-  //           }
-  //         : task,
-  //     ),
-  //   );
-  // };
+    setTasks(() =>
+      tasks.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              column_id: newColumnId,
+            }
+          : task,
+      ),
+    );
+
+    const task = tasks.find((task) => task.id === taskId)!;
+    await updateTask(taskId, {
+      ...task,
+      column_id: newColumnId,
+    });
+
+    const tasksResult = await getTasks();
+    setTasks(tasksResult.data || []);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
   return (
     <>
       <h1>MVP Board</h1>
-
-      <Columns
-        columns={columns}
-        setColumns={setColumns}
-        tasks={tasks}
-        setTasks={setTasks}
-      />
+      <DndContext onDragEnd={handleDragEnd}>
+        <Columns
+          columns={columns}
+          setColumns={setColumns}
+          tasks={tasks}
+          setTasks={setTasks}
+        />
+      </DndContext>
     </>
   );
 }
