@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useDraggable } from '@dnd-kit/core';
+import type { TaskCardProps } from '../types/task.types';
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
   });

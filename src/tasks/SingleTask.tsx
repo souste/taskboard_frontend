@@ -1,25 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTask, updateTask, deleteTask } from '../api/task';
+import type { Task, TaskBody } from '../types/task.types';
 import TaskForm from './TaskForm';
-
-type Task = {
-  id: number;
-  user_id: number;
-  column_id: number;
-  title: string;
-  description: string;
-  position: number;
-  created_at: string;
-  updated_at: string;
-};
-
-type Values = {
-  title: string;
-  description: string;
-  position: number | null;
-  column_id: number;
-};
 
 export default function SingleTask() {
   const [task, setTask] = useState<Task | null>(null);
@@ -58,7 +41,7 @@ export default function SingleTask() {
     fetchTask();
   }, [id]);
 
-  const handleUpdate = async (id: number, values: Values) => {
+  const handleUpdate = async (id: number, values: TaskBody) => {
     await updateTask(id, values);
     const result = await getTask(id);
     setTask(result.data || null);

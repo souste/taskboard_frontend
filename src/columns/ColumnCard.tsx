@@ -1,6 +1,7 @@
 import TaskList from '../tasks/TaskList';
 import ColumnForm from './ColumnForm';
 import { useDroppable } from '@dnd-kit/core';
+import type { ColumnCardProps } from '../types/column.types';
 
 export default function ColumnCard({
   column,
@@ -8,11 +9,10 @@ export default function ColumnCard({
   setTasks,
   editColumnId,
   setEditColumnId,
-  handleCreate,
   handleUpdate,
   handleDelete,
   handleEdit,
-}) {
+}: ColumnCardProps) {
   const { setNodeRef } = useDroppable({
     id: column.id,
   });

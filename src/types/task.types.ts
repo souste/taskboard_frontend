@@ -19,4 +19,9 @@ export type TaskBody = {
   title: string;
   description: string;
   position: number | null;
+  column_id: number;
+};
+
+export type TaskCardProps = {
+  task: Task;
 };
