@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDroppable } from '@dnd-kit/core';
-import TaskList from '../tasks/TaskList';
+import ColumnCard from './ColumnCard';
 import ColumnForm from './ColumnForm';
 import {
   getColumns,
@@ -75,43 +74,19 @@ export default function Columns({
     <div className="flex justify-center">
       <div className="flex gap-6">
         {columns.map((column) => {
-          const { setNodeRef } = useDroppable({
-            id: column.id,
-          });
           return (
-            <div
+            <ColumnCard
               key={column.id}
-              ref={setNodeRef}
-              className="min-h-[200px] w-64 rounded bg-gray-300 p-2"
-            >
-              <p className="mb-4 font-bold">{column.name}</p>
-              <TaskList
-                tasks={tasks}
-                setTasks={setTasks}
-                columnId={column.id}
-              />
-              <div className="space-x-4">
-                <button
-                  onClick={() => handleEdit(column.id)}
-                  className="bg-yellow-500"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDelete(column.id)}
-                  className="bg-red-500"
-                >
-                  Delete
-                </button>
-              </div>
-              {editColumnId === column.id && (
-                <ColumnForm
-                  column={column}
-                  setEditColumnId={setEditColumnId}
-                  onSubmit={(values) => handleUpdate(column.id, values)}
-                />
-              )}
-            </div>
+              column={column}
+              tasks={tasks}
+              setTasks={setTasks}
+              editColumnId={editColumnId}
+              setEditColumnId={setEditColumnId}
+              handleCreate={handleCreate}
+              handleUpdate={handleUpdate}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+            />
           );
         })}
         <div className="w-64 rounded bg-gray-300/30 p-2">
