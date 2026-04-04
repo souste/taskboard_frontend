@@ -18,11 +18,7 @@ export default function ColumnCard({
   });
   return (
     <div>
-      <div
-        key={column.id}
-        ref={setNodeRef}
-        className="w-64 rounded bg-gray-300 p-2"
-      >
+      <div ref={setNodeRef} className="w-64 rounded bg-gray-300 p-2">
         <p className="mb-4 font-bold">{column.name}</p>
         <TaskList tasks={tasks} setTasks={setTasks} columnId={column.id} />
         <div className="space-x-4">

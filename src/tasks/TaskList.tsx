@@ -1,42 +1,15 @@
 import TaskForm from './TaskForm';
 import TaskCard from './TaskCard';
-import { getTasks, createTask } from '../api/task';
-
-type Task = {
-  id: number;
-  user_id: number;
-  column_id: number;
-  title: string;
-  description: string;
-  position: number;
-  created_at: string;
-  updated_at: string;
-};
-
-type TaskListProps = {
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-  columnId: number;
-};
-
-type Values = {
-  title: string;
-  description: string;
-  position: number | null;
-};
+import { createTask } from '../api/task';
+import type { TaskListProps, TaskBody } from '../types/task.types';
 
 export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
-  // const [loading, setLoading] = useState(true);
-  // const [errors, setErrors] = useState('');
-
-  const handleCreate = async (values: Values) => {
-    await createTask(values);
-    const result = await getTasks();
-    setTasks(result.data || []);
+  const handleCreate = async (values: TaskBody) => {
+    const response = await createTask(values);
+    const newTask = response.data;
+    if (!newTask) return;
+    setTasks((prev) => [...prev, newTask]);
   };
-
-  // if (loading) return <p>Loading...</p>;
-  // if (errors) return <p>{errors}</p>;
 
   return (
     <div>

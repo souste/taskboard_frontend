@@ -4,25 +4,8 @@ import { getColumns } from '../../api/column';
 import { getTasks, updateTask } from '../../api/task';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
-
-type Column = {
-  id: number;
-  user_id: number;
-  name: string;
-  position: number;
-  created_at: string;
-};
-
-type Task = {
-  id: number;
-  user_id: number;
-  column_id: number;
-  title: string;
-  description: string;
-  position: number;
-  created_at: string;
-  updated_at: string;
-};
+import type { Column } from '../../types/column.types';
+import type { Task } from '../../types/task.types';
 
 export default function SingleBoard() {
   const [columns, setColumns] = useState<Column[]>([]);

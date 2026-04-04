@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import type { ColumnBody, ColumnProps } from '../types/column.types';
 import ColumnCard from './ColumnCard';
 import ColumnForm from './ColumnForm';
 import {
@@ -8,37 +9,6 @@ import {
   deleteColumn,
 } from '../api/column';
 
-type Column = {
-  id: number;
-  user_id: number;
-  name: string;
-  position: number;
-  created_at: string;
-};
-
-type Task = {
-  id: number;
-  user_id: number;
-  column_id: number;
-  title: string;
-  description: string;
-  position: number;
-  created_at: string;
-  updated_at: string;
-};
-
-type ColumnProps = {
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-  columns: Column[];
-  setColumns: React.Dispatch<React.SetStateAction<Column[]>>;
-};
-
-type Values = {
-  name: string;
-  position: number | null;
-};
-
 export default function Columns({
   columns,
   setColumns,
@@ -47,13 +17,13 @@ export default function Columns({
 }: ColumnProps) {
   const [editColumnId, setEditColumnId] = useState<number | null>(null);
 
-  const handleCreate = async (values: Values) => {
+  const handleCreate = async (values: ColumnBody) => {
     await createColumn(values);
     const result = await getColumns();
     setColumns(result.data || []);
   };
 
-  const handleUpdate = async (columnId: number, values: Values) => {
+  const handleUpdate = async (columnId: number, values: ColumnBody) => {
     await updateColumn(columnId, values);
     const result = await getColumns();
     setColumns(result.data || []);
