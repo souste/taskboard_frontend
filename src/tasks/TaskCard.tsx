@@ -1,33 +1,34 @@
 import { Link } from 'react-router-dom';
-import { useDraggable } from '@dnd-kit/core';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { TaskCardProps } from '../types/task.types';
 
 export default function TaskCard({ task }: TaskCardProps) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id,
-  });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: task.id.toString(),
+    });
 
-  const style = transform
-    ? {
-        transform: `translate(${transform.x}px, ${transform.y}px )`,
-      }
-    : undefined;
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   return (
-    <Link to={`/tasks/${task.id}`}>
-      <div
-        ref={setNodeRef}
-        {...listeners}
-        {...attributes}
-        className="mb-3 block rounded bg-gray-100 p-3 shadow-md"
-        style={style}
-      >
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className="mb-3 block rounded bg-gray-100 p-3 shadow-md"
+      style={style}
+    >
+      <Link to={`/tasks/${task.id}`}>
         {transform ? (
           <h3 className="font-semibold wrap-break-word">{task.title}</h3>
         ) : (
           <h3 className="font-semibold wrap-break-word">{task.title}</h3>
         )}
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

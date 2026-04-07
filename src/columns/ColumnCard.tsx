@@ -13,36 +13,33 @@ export default function ColumnCard({
   handleDelete,
   handleEdit,
 }: ColumnCardProps) {
-  const { setNodeRef } = useDroppable({
-    id: column.id,
+  const { setNodeRef, isOver } = useDroppable({
+    id: column.id.toString(),
   });
   return (
-    <div>
-      <div ref={setNodeRef} className="w-64 rounded bg-gray-300 p-2">
-        <p className="mb-4 font-bold">{column.name}</p>
-        <TaskList tasks={tasks} setTasks={setTasks} columnId={column.id} />
-        <div className="space-x-4">
-          <button
-            onClick={() => handleEdit(column.id)}
-            className="bg-yellow-500"
-          >
-            Update
-          </button>
-          <button
-            onClick={() => handleDelete(column.id)}
-            className="bg-red-500"
-          >
-            Delete
-          </button>
-        </div>
-        {editColumnId === column.id && (
-          <ColumnForm
-            column={column}
-            setEditColumnId={setEditColumnId}
-            onSubmit={(values) => handleUpdate(column.id, values)}
-          />
-        )}
+    <div
+      ref={setNodeRef}
+      className={`w-64 rounded bg-gray-300 p-2 ${
+        isOver ? 'bg-green-400' : 'bg-gray-300'
+      }`}
+    >
+      <p className="mb-4 font-bold">{column.name}</p>
+      <TaskList tasks={tasks} setTasks={setTasks} columnId={column.id} />
+      <div className="space-x-4">
+        <button onClick={() => handleEdit(column.id)} className="bg-yellow-500">
+          Update
+        </button>
+        <button onClick={() => handleDelete(column.id)} className="bg-red-500">
+          Delete
+        </button>
       </div>
+      {editColumnId === column.id && (
+        <ColumnForm
+          column={column}
+          setEditColumnId={setEditColumnId}
+          onSubmit={(values) => handleUpdate(column.id, values)}
+        />
+      )}
     </div>
   );
 }
