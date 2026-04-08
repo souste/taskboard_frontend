@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 type Values = {
   name: string;
-  position: number | null;
 };
 
 type Column = {
@@ -26,32 +25,26 @@ export default function ColumnForm({
 }: ColumnFormProps) {
   const [values, setValues] = useState<Values>({
     name: column?.name ?? '',
-    position: column?.position ?? null,
   });
 
   const [error, setError] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    const field = name as keyof Values;
+
     setValues((prev) => ({
       ...prev,
-      [field]: field === 'position' ? Number(value) : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (values.position === null) {
-      setError('Position is required');
-      return;
-    }
     onSubmit(values);
     if (!column) {
       setValues({
         name: '',
-        position: null,
       });
     }
 
@@ -69,14 +62,6 @@ export default function ColumnForm({
               value={values.name}
               onChange={handleChange}
               placeholder="Column name"
-              className="border bg-white"
-            />
-            <input
-              name="position"
-              type="number"
-              value={values.position ?? ''}
-              onChange={handleChange}
-              placeholder="Column Position"
               className="border bg-white"
             />
           </div>

@@ -6,6 +6,7 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, DragOverlay, rectIntersection } from '@dnd-kit/core';
 import type { Column } from '../../types/column.types';
 import type { Task } from '../../types/task.types';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export default function SingleBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
@@ -74,37 +75,48 @@ export default function SingleBoard() {
     const taskId = Number(active.id);
     const overId = over.id;
 
-    console.log('active:', active.id, 'over:', over?.id);
-
     const overIsTask = tasks.some((task) => task.id.toString() === overId);
 
     const overIsColumn = columns.some(
       (column) => column.id.toString() === overId,
     );
 
-    // if (overIsTask) {
-    //   const newTaskId = Number(overId);
-    //   setTasks(() =>
-    //     tasks.map((task) =>
-    //       task.id === taskId
-    //         ? {
-    //             ...task,
-    //             id: newTaskId,
-    //           }
-    //         : task,
-    //     ),
-    //   );
-    //   await updateTask(taskId, {
-    //     ...tasks.find((task) => task.id === taskId)!,
-    //     [CHANGE!!!]: newTaskId,
-    //   });
-    //   const tasksResult = await getTasks();
-    //   setTasks(tasksResult.data || []);
-    // }
+    if (overIsTask) {
+      const activeTaskId = Number(active.id);
+      const overTaskId = Number(over.id);
+
+      const activeTask = tasks.find((t) => t.id === activeTaskId);
+      const overTask = tasks.find((t) => t.id === overTaskId);
+
+      if (!activeTask || !overTask) return;
+
+      if (activeTask.column_id !== overTask.column_id) {
+        return;
+      }
+
+      const tasksInColumn = tasks.filter(
+        (t) => t.column_id === activeTask.column_id,
+      );
+      // .sort((a, b) => a.position - b.position);
+
+      const oldIndex = tasksInColumn.findIndex((t) => t.id === activeTaskId);
+      const newIndex = tasksInColumn.findIndex((t) => t.id === overTaskId);
+
+      const newOrder = arrayMove(tasksInColumn, oldIndex, newIndex);
+
+      const updatedTasks = tasks.map((task) => {
+        const updated = newOrder.find((t) => t.id === task.id);
+        return updated ? updated : task;
+      });
+
+      setTasks(updatedTasks);
+
+      // const result = await getTasks();
+      // setTasks(result.data || []);
+    }
 
     if (overIsColumn) {
       const newColumnId = Number(overId);
-      console.log('newColumnId', newColumnId);
       setTasks(() =>
         tasks.map((task) =>
           task.id === taskId

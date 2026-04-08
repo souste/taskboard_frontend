@@ -9,7 +9,14 @@ import {
 
 export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
   const handleCreate = async (values: TaskBody) => {
-    const response = await createTask(values);
+    const tasksInColumn = tasks.filter((t) => t.column_id === columnId);
+    const newPosition = tasksInColumn.length;
+
+    const response = await createTask({
+      ...values,
+      position: newPosition,
+      column_id: columnId,
+    });
     const newTask = response.data;
     if (!newTask) return;
     setTasks((prev) => [...prev, newTask]);
