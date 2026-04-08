@@ -18,7 +18,8 @@ export default function Columns({
   const [editColumnId, setEditColumnId] = useState<number | null>(null);
 
   const handleCreate = async (values: ColumnBody) => {
-    await createColumn(values);
+    const position = columns.length;
+    await createColumn({ ...values, position: position });
     const result = await getColumns();
     setColumns(result.data || []);
   };

@@ -4,7 +4,6 @@ import { useState } from 'react';
 type Values = {
   title: string;
   description: string;
-  position: number | null;
   column_id: number | null;
 };
 
@@ -35,33 +34,26 @@ export default function TaskForm({
   const [values, setValues] = useState<Values>({
     title: task?.title ?? '',
     description: task?.description ?? '',
-    position: task?.position ?? null,
     column_id: task?.column_id ?? columnId,
   });
   const [error, setError] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    const field = name as keyof Values;
     setValues((prev) => ({
       ...prev,
-      [field]: field === 'position' ? Number(value) : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (values.position === null) {
-      setError('Position is required');
-      return;
-    }
     onSubmit(values);
     if (!task) {
       setValues({
         title: '',
         description: '',
-        position: null,
         column_id: columnId,
       });
     }
@@ -86,13 +78,6 @@ export default function TaskForm({
             value={values.description}
             onChange={handleChange}
             placeholder="Task description"
-          />
-          <input
-            name="position"
-            type="number"
-            value={values.position ?? ''}
-            onChange={handleChange}
-            placeholder="Task position"
           />
         </div>
         <button className="bg-green-500">Submit</button>

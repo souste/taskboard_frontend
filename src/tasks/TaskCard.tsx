@@ -17,11 +17,16 @@ export default function TaskCard({ task }: TaskCardProps) {
   return (
     <div
       ref={setNodeRef}
-      {...listeners}
-      {...attributes}
       className="mb-3 block rounded bg-gray-100 p-3 shadow-md"
       style={style}
     >
+      <div
+        {...listeners}
+        {...attributes}
+        className="cursor-grab text-sm text-gray-500"
+      >
+        ⋮⋮
+      </div>
       <Link to={`/tasks/${task.id}`}>
         {transform ? (
           <h3 className="font-semibold wrap-break-word">{task.title}</h3>
