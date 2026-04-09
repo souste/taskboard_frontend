@@ -3,11 +3,16 @@ import type { ColumnBody, ColumnProps } from '../types/column.types';
 import ColumnCard from './ColumnCard';
 import ColumnForm from './ColumnForm';
 import {
+  horizontalListSortingStrategy,
+  SortableContext,
+} from '@dnd-kit/sortable';
+import {
   getColumns,
   createColumn,
   updateColumn,
   deleteColumn,
 } from '../api/column';
+import SortableColumn from './SortableColumn';
 
 export default function Columns({
   columns,
@@ -45,23 +50,34 @@ export default function Columns({
   return (
     <div className="flex justify-center">
       <div className="flex gap-6">
-        {columns.map((column) => {
-          return (
-            <ColumnCard
-              key={column.id}
-              column={column}
-              tasks={tasks}
-              setTasks={setTasks}
-              editColumnId={editColumnId}
-              setEditColumnId={setEditColumnId}
-              handleCreate={handleCreate}
-              handleUpdate={handleUpdate}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              activeTask={activeTask}
-            />
-          );
-        })}
+        <SortableContext
+          items={columns.map((c) => c.id.toString())}
+          strategy={horizontalListSortingStrategy}
+        >
+          {columns.map((column) => {
+            return (
+              <SortableColumn column={column} key={column.id}>
+                {({ attributes, listeners }) => (
+                  <ColumnCard
+                    key={column.id}
+                    column={column}
+                    tasks={tasks}
+                    setTasks={setTasks}
+                    editColumnId={editColumnId}
+                    setEditColumnId={setEditColumnId}
+                    handleCreate={handleCreate}
+                    handleUpdate={handleUpdate}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    activeTask={activeTask}
+                    dragAttributes={attributes}
+                    dragListeners={listeners}
+                  />
+                )}
+              </SortableColumn>
+            );
+          })}
+        </SortableContext>
         <div className="w-64 rounded bg-gray-300/30 p-2">
           <p className="mb-2">Add another List:</p>
           <ColumnForm onSubmit={handleCreate} />

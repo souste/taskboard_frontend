@@ -1,11 +1,12 @@
 import Columns from '../../columns/Columns';
 import { useState, useEffect } from 'react';
-import { getColumns } from '../../api/column';
+import { getColumns, updateColumn } from '../../api/column';
 import { getTasks, updateTask } from '../../api/task';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, DragOverlay, rectIntersection } from '@dnd-kit/core';
 import type { Column } from '../../types/column.types';
 import type { Task } from '../../types/task.types';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export default function SingleBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
@@ -13,6 +14,7 @@ export default function SingleBoard() {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -61,7 +63,15 @@ export default function SingleBoard() {
   }, []);
 
   const handleDragStart = (event) => {
-    const taskId = Number(event.active.id);
+    const id = event.active.id;
+
+    const column = columns.find((c) => c.id.toString() === id);
+    if (column) {
+      setActiveColumn(column);
+      return;
+    }
+
+    const taskId = Number(id);
     const task = tasks.find((t) => t.id === taskId);
     if (task) setActiveTask(task);
   };
@@ -70,6 +80,37 @@ export default function SingleBoard() {
     setActiveTask(null);
     const { active, over } = event;
     if (!over) return;
+
+    const activeCol = activeColumn;
+    if (activeCol) {
+      setActiveColumn(null);
+
+      const overCol = columns.find((c) => c.id.toString() === over.id);
+      if (!overCol) return;
+
+      const oldIndex = columns.findIndex((c) => c.id === activeCol.id);
+      const newIndex = columns.findIndex((c) => c.id === overCol.id);
+
+      if (oldIndex === newIndex) return;
+
+      const newOrder = arrayMove(columns, oldIndex, newIndex);
+
+      const reindexed = newOrder.map((col, index) => ({
+        ...col,
+        position: index,
+      }));
+
+      setColumns(reindexed);
+
+      for (const col of reindexed) {
+        await updateColumn(col.id, {
+          name: col.name,
+          position: col.position,
+        });
+      }
+
+      return;
+    }
 
     const taskId = Number(active.id);
     const overId = over.id;

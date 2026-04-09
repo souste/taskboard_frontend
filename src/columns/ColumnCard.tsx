@@ -13,6 +13,8 @@ export default function ColumnCard({
   handleDelete,
   handleEdit,
   activeTask,
+  dragAttributes,
+  dragListeners,
 }: ColumnCardProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id.toString(),
@@ -24,7 +26,18 @@ export default function ColumnCard({
         isOver ? 'bg-green-400' : 'bg-gray-300'
       }`}
     >
-      <p className="mb-4 font-bold">{column.name}</p>
+      <div className="mb-4 flex items-center justify-between">
+        <p className="font-bold">{column.name}</p>
+
+        <div
+          {...dragAttributes}
+          {...dragListeners}
+          className="cursor-grab p-1 text-gray-500"
+        >
+          ⋮⋮
+        </div>
+      </div>
+
       <TaskList
         tasks={tasks}
         setTasks={setTasks}
