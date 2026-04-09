@@ -1,4 +1,6 @@
 import type { Task } from '../types/task.types';
+import type { DraggableAttributes } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
 export type Column = {
   id: number;
@@ -32,4 +34,6 @@ export type ColumnCardProps = {
   handleDelete: (id: number) => Promise<void>;
   handleEdit: (id: number) => void;
   activeTask?: Task | null;
+  dragAttributes: DraggableAttributes;
+  dragListeners: SyntheticListenerMap;
 };
