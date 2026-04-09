@@ -94,15 +94,18 @@ export default function SingleBoard() {
         return;
       }
 
-      const tasksInColumn = tasks.filter(
-        (t) => t.column_id === activeTask.column_id,
-      );
-      // .sort((a, b) => a.position - b.position);
+      const tasksInColumn = tasks
+        .filter((t) => t.column_id === activeTask.column_id)
+        .sort((a, b) => a.position - b.position);
 
       const oldIndex = tasksInColumn.findIndex((t) => t.id === activeTaskId);
       const newIndex = tasksInColumn.findIndex((t) => t.id === overTaskId);
 
       const newOrder = arrayMove(tasksInColumn, oldIndex, newIndex);
+
+      newOrder.forEach((task, index) => {
+        task.position = index;
+      });
 
       const updatedTasks = tasks.map((task) => {
         const updated = newOrder.find((t) => t.id === task.id);
@@ -111,28 +114,53 @@ export default function SingleBoard() {
 
       setTasks(updatedTasks);
 
-      // const result = await getTasks();
-      // setTasks(result.data || []);
+      for (const task of newOrder) {
+        const original = updatedTasks.find((t) => t.id === task.id);
+
+        await updateTask(task.id, {
+          title: original.title,
+          description: original.description,
+          column_id: original.column_id,
+          position: task.position,
+        });
+      }
+
+      return;
     }
 
     if (overIsColumn) {
       const newColumnId = Number(overId);
-      setTasks(() =>
+
+      const tasksInNewColumn = tasks
+        .filter((t) => t.column_id === newColumnId)
+        .sort((a, b) => a.position - b.position);
+
+      const newPosition = tasksInNewColumn.length;
+
+      setTasks((tasks) =>
         tasks.map((task) =>
           task.id === taskId
             ? {
                 ...task,
                 column_id: newColumnId,
+                position: newPosition,
               }
             : task,
         ),
       );
+
+      const original = tasks.find((t) => t.id === taskId);
+
       await updateTask(taskId, {
-        ...tasks.find((task) => task.id === taskId)!,
+        title: original.title,
+        description: original?.description,
         column_id: newColumnId,
+        position: newPosition,
       });
       const tasksResult = await getTasks();
       setTasks(tasksResult.data || []);
+
+      return;
     }
   };
 

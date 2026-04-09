@@ -22,7 +22,9 @@ export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
     setTasks((prev) => [...prev, newTask]);
   };
 
-  const tasksInColumn = tasks.filter((task) => task.column_id === columnId);
+  const tasksInColumn = tasks
+    .filter((task) => task.column_id === columnId)
+    .sort((a, b) => a.position - b.position);
 
   return (
     <div>
