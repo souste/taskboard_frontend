@@ -13,6 +13,7 @@ export type ColumnProps = {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   columns: Column[];
   setColumns: React.Dispatch<React.SetStateAction<Column[]>>;
+  activeTask?: Task | null;
 };
 
 export type ColumnBody = {
@@ -30,4 +31,5 @@ export type ColumnCardProps = {
   handleUpdate: (id: number, values: ColumnBody) => Promise<void>;
   handleDelete: (id: number) => Promise<void>;
   handleEdit: (id: number) => void;
+  activeTask?: Task | null;
 };

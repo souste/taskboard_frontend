@@ -13,6 +13,7 @@ export type TaskListProps = {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   columnId: number;
+  activeTask?: Task | null;
 };
 
 export type TaskBody = {

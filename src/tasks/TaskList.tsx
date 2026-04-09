@@ -7,7 +7,12 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
-export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
+export default function TaskList({
+  tasks,
+  setTasks,
+  columnId,
+  activeTask,
+}: TaskListProps) {
   const handleCreate = async (values: TaskBody) => {
     const tasksInColumn = tasks.filter((t) => t.column_id === columnId);
     const newPosition = tasksInColumn.length;
@@ -26,10 +31,15 @@ export default function TaskList({ tasks, setTasks, columnId }: TaskListProps) {
     .filter((task) => task.column_id === columnId)
     .sort((a, b) => a.position - b.position);
 
+  const sortableItems =
+    activeTask && activeTask.column_id !== columnId
+      ? [...tasksInColumn.map((t) => t.id.toString()), activeTask.id.toString()]
+      : tasksInColumn.map((t) => t.id.toString());
+
   return (
     <div>
       <SortableContext
-        items={tasksInColumn.map((task) => task.id.toString())}
+        items={sortableItems}
         strategy={verticalListSortingStrategy}
       >
         {tasksInColumn.map((task) => (

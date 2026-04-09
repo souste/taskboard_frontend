@@ -6,7 +6,6 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, DragOverlay, rectIntersection } from '@dnd-kit/core';
 import type { Column } from '../../types/column.types';
 import type { Task } from '../../types/task.types';
-import { arrayMove } from '@dnd-kit/sortable';
 
 export default function SingleBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
@@ -75,92 +74,58 @@ export default function SingleBoard() {
     const taskId = Number(active.id);
     const overId = over.id;
 
-    const overIsTask = tasks.some((task) => task.id.toString() === overId);
+    const activeTask = tasks.find((t) => t.id === taskId);
+    if (!activeTask) return;
 
-    const overIsColumn = columns.some(
-      (column) => column.id.toString() === overId,
-    );
+    let targetColumnId: number;
 
-    if (overIsTask) {
-      const activeTaskId = Number(active.id);
-      const overTaskId = Number(over.id);
+    const overTask = tasks.find((t) => t.id.toString() === overId);
+    const overColumn = columns.find((c) => c.id.toString() === overId);
 
-      const activeTask = tasks.find((t) => t.id === activeTaskId);
-      const overTask = tasks.find((t) => t.id === overTaskId);
-
-      if (!activeTask || !overTask) return;
-
-      if (activeTask.column_id !== overTask.column_id) {
-        return;
-      }
-
-      const tasksInColumn = tasks
-        .filter((t) => t.column_id === activeTask.column_id)
-        .sort((a, b) => a.position - b.position);
-
-      const oldIndex = tasksInColumn.findIndex((t) => t.id === activeTaskId);
-      const newIndex = tasksInColumn.findIndex((t) => t.id === overTaskId);
-
-      const newOrder = arrayMove(tasksInColumn, oldIndex, newIndex);
-
-      newOrder.forEach((task, index) => {
-        task.position = index;
-      });
-
-      const updatedTasks = tasks.map((task) => {
-        const updated = newOrder.find((t) => t.id === task.id);
-        return updated ? updated : task;
-      });
-
-      setTasks(updatedTasks);
-
-      for (const task of newOrder) {
-        const original = updatedTasks.find((t) => t.id === task.id);
-
-        await updateTask(task.id, {
-          title: original.title,
-          description: original.description,
-          column_id: original.column_id,
-          position: task.position,
-        });
-      }
-
+    if (overTask) {
+      targetColumnId = overTask.column_id;
+    } else if (overColumn) {
+      targetColumnId = overColumn.id;
+    } else {
       return;
     }
 
-    if (overIsColumn) {
-      const newColumnId = Number(overId);
+    const tasksInTarget = tasks
+      .filter((t) => t.column_id === targetColumnId && t.id !== taskId)
+      .sort((a, b) => a.position - b.position);
 
-      const tasksInNewColumn = tasks
-        .filter((t) => t.column_id === newColumnId)
-        .sort((a, b) => a.position - b.position);
+    let targetIndex = tasksInTarget.length;
 
-      const newPosition = tasksInNewColumn.length;
+    if (overTask) {
+      targetIndex = tasksInTarget.findIndex((t) => t.id === overTask.id);
+      if (targetIndex === -1) targetIndex = tasksInTarget.length;
+    }
 
-      setTasks((tasks) =>
-        tasks.map((task) =>
-          task.id === taskId
-            ? {
-                ...task,
-                column_id: newColumnId,
-                position: newPosition,
-              }
-            : task,
-        ),
-      );
+    const reordered = [
+      ...tasksInTarget.slice(0, targetIndex),
+      { ...activeTask, column_id: targetColumnId },
+      ...tasksInTarget.slice(targetIndex),
+    ];
 
-      const original = tasks.find((t) => t.id === taskId);
+    const reindexed = reordered.map((task, index) => ({
+      ...task,
+      position: index,
+    }));
 
-      await updateTask(taskId, {
-        title: original.title,
-        description: original?.description,
-        column_id: newColumnId,
-        position: newPosition,
+    const finalTasks = tasks.map((t) => {
+      const updated = reindexed.find((r) => r.id === t.id);
+      return updated ? updated : t;
+    });
+
+    setTasks(finalTasks);
+
+    for (const task of reindexed) {
+      await updateTask(task.id, {
+        title: task.title,
+        description: task.description,
+        column_id: task.column_id,
+        position: task.position,
       });
-      const tasksResult = await getTasks();
-      setTasks(tasksResult.data || []);
-
-      return;
     }
   };
 
@@ -179,6 +144,7 @@ export default function SingleBoard() {
           setColumns={setColumns}
           tasks={tasks}
           setTasks={setTasks}
+          activeTask={activeTask}
         />
 
         <DragOverlay>

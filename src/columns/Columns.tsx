@@ -14,6 +14,7 @@ export default function Columns({
   setColumns,
   tasks,
   setTasks,
+  activeTask,
 }: ColumnProps) {
   const [editColumnId, setEditColumnId] = useState<number | null>(null);
 
@@ -57,6 +58,7 @@ export default function Columns({
               handleUpdate={handleUpdate}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
+              activeTask={activeTask}
             />
           );
         })}

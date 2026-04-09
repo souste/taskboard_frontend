@@ -12,6 +12,7 @@ export default function ColumnCard({
   handleUpdate,
   handleDelete,
   handleEdit,
+  activeTask,
 }: ColumnCardProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id.toString(),
@@ -24,7 +25,12 @@ export default function ColumnCard({
       }`}
     >
       <p className="mb-4 font-bold">{column.name}</p>
-      <TaskList tasks={tasks} setTasks={setTasks} columnId={column.id} />
+      <TaskList
+        tasks={tasks}
+        setTasks={setTasks}
+        columnId={column.id}
+        activeTask={activeTask}
+      />
       <div className="space-x-4">
         <button onClick={() => handleEdit(column.id)} className="bg-yellow-500">
           Update
