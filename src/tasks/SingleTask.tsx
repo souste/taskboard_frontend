@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getTask, updateTask, deleteTask } from '../api/task';
 import type { Task, TaskBody } from '../types/task.types';
 import TaskForm from './TaskForm';
+import CommentList from '../comments/CommentList';
 
 export default function SingleTask() {
   const [task, setTask] = useState<Task | null>(null);
@@ -84,9 +85,9 @@ export default function SingleTask() {
           )}
         </div>
         <div>
-          <p className="mb-4">[***Create Comment***]</p>
-          <p className="mb-2">Comments:</p>
-          <p className="mb-4">"Sample comments here"</p>
+          <div>
+            <CommentList />
+          </div>
           <p>
             Task Created:
             {task?.created_at
