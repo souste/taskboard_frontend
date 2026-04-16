@@ -50,7 +50,11 @@ export const getComments = async (
     return result;
   } catch (err) {
     console.error('Failed to retrieve comments', err);
-    return { success: false, message: 'Network error. Please try again' };
+    return {
+      success: false,
+      message: 'Network error. Please try again',
+      errors: { error: 'Network error. Please try again' },
+    };
   }
 };
 
@@ -85,6 +89,93 @@ export const createComment = async (
     return result;
   } catch (err) {
     console.error('Failed to create comment', err);
-    return { success: false, message: 'Network error. Please try again' };
+    return {
+      success: false,
+      message: 'Network error. Please try again',
+      errors: { error: 'Network error. Please try again' },
+    };
+  }
+};
+
+export const updateComment = async (
+  commentData: CommentBody,
+  commentId: number,
+  taskId: number,
+): Promise<ApiResponse<CommentData | null>> => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const response = await fetch(
+      `${API_BASE}/tasks/${taskId}/comments/${commentId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(commentData),
+      },
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: result.message || 'Failed to update comment',
+        errors: { error: result.message },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to update comment', err);
+    return {
+      success: false,
+      message: 'Network error. Please try again',
+      errors: { error: 'Network error. Please try again' },
+    };
+  }
+};
+
+export const deleteComment = async (
+  taskId: number,
+  commentId: number,
+): Promise<ApiResponse<CommentData | null>> => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const response = await fetch(
+      `${API_BASE}/tasks/${taskId}/comments/${commentId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: result.message || 'Failed to delete comment',
+        errors: { error: result.message },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to delete comment', err);
+    return {
+      success: false,
+      message: 'Network error. Please try again',
+      errors: { error: 'Network error. Please try again' },
+    };
   }
 };
