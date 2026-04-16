@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getComments } from '../api/comment';
-import type { Comment } from '../types/comment.types';
+import { getComments, createComment } from '../api/comment';
+import CommentForm from './CommentForm';
+import type { Comment, CommentBody } from '../types/comment.types';
 
 export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -33,6 +34,20 @@ export default function CommentList() {
     fetchComments();
   }, [taskId]);
 
+  const handleCreate = async (values: CommentBody) => {
+    const id = Number(taskId);
+    const response = await createComment(values, id);
+
+    if (response.errors) {
+      setErrors(response.errors.error);
+      return;
+    }
+
+    const newComment = response.data;
+    if (!newComment) return;
+    setComments((prev) => [...prev, newComment]);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
 
@@ -49,6 +64,8 @@ export default function CommentList() {
           </div>
         ))}
       </div>
+      <div>Create Comment:</div>
+      <CommentForm onSubmit={handleCreate} taskId={taskId} />
     </div>
   );
 }
