@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Comment, CommentBody } from '../types/comment.types';
 
 export default function CommentForm({ comment, onSubmit }) {
@@ -7,6 +7,10 @@ export default function CommentForm({ comment, onSubmit }) {
     content: comment?.content ?? '',
   });
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    setValues({ content: comment?.content ?? '' });
+  }, [comment]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -47,7 +51,7 @@ export default function CommentForm({ comment, onSubmit }) {
             placeholder="Add a comment"
           />
         </div>
-        <button>Submit</button>
+        <button className="bg-green-500">Submit</button>
       </form>
     </div>
   );

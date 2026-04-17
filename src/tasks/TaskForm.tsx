@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Values = {
   title: string;
@@ -37,6 +37,14 @@ export default function TaskForm({
     column_id: task?.column_id ?? columnId,
   });
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    setValues({
+      title: task?.title ?? '',
+      description: task?.description ?? '',
+      column_id: task?.column_id ?? columnId,
+    });
+  }, [task, columnId]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

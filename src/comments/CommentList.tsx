@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getComments, createComment } from '../api/comment';
+import {
+  getComments,
+  createComment,
+  updateComment,
+  deleteComment,
+} from '../api/comment';
 import CommentForm from './CommentForm';
 import type { Comment, CommentBody } from '../types/comment.types';
 
@@ -8,7 +13,9 @@ export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
+  const [editCommentId, setEditCommentId] = useState<number | null>(null);
   const { taskId } = useParams();
+  const id = Number(taskId);
 
   useEffect(() => {
     if (!taskId) return;
@@ -16,7 +23,7 @@ export default function CommentList() {
       try {
         setLoading(true);
         setErrors('');
-        const id = Number(taskId);
+
         const result = await getComments(id);
         if (result.errors) {
           setErrors(result.errors.error);
@@ -35,7 +42,6 @@ export default function CommentList() {
   }, [taskId]);
 
   const handleCreate = async (values: CommentBody) => {
-    const id = Number(taskId);
     const response = await createComment(values, id);
 
     if (response.errors) {
@@ -46,6 +52,23 @@ export default function CommentList() {
     const newComment = response.data;
     if (!newComment) return;
     setComments((prev) => [...prev, newComment]);
+  };
+
+  const handleUpdate = async (values: CommentBody, commentId: number) => {
+    const response = await updateComment(values, commentId, taskId);
+
+    if (response.errors) {
+      setErrors(response.errors.error);
+      return;
+    }
+
+    const result = await getComments(taskId);
+    setComments(result.data || []);
+    setEditCommentId(null);
+  };
+
+  const handleEdit = (commentId: number) => {
+    setEditCommentId(commentId);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -61,11 +84,23 @@ export default function CommentList() {
             <div>
               Comment Created: {new Date(comment.created_at).toLocaleString()}
             </div>
+            <button
+              onClick={() => handleEdit(comment.id)}
+              className="bg-yellow-500"
+            >
+              Update
+            </button>
+            {editCommentId === comment.id && (
+              <CommentForm
+                comment={comment}
+                onSubmit={(values) => handleUpdate(values, comment.id, id)}
+              />
+            )}
           </div>
         ))}
       </div>
       <div>Create Comment:</div>
-      <CommentForm onSubmit={handleCreate} taskId={taskId} />
+      <CommentForm onSubmit={handleCreate} />
     </div>
   );
 }
