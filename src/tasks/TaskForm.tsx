@@ -89,7 +89,7 @@ export default function TaskForm({
           />
         </div>
         <button className="bg-green-500">Submit</button>
-        <button onClick={() => setEditTask(false)}>Cancel</button>
+        {task && <button onClick={() => setEditTask(false)}>Cancel</button>}
       </form>
     </div>
   );

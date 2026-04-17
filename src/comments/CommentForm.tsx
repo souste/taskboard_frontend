@@ -52,9 +52,11 @@ export default function CommentForm({ comment, onSubmit, setEditCommentId }) {
           />
         </div>
         <button className="bg-green-500">Submit</button>
-        <button type="button" onClick={() => setEditCommentId(null)}>
-          Cancel
-        </button>
+        {comment && (
+          <button type="button" onClick={() => setEditCommentId(null)}>
+            Cancel
+          </button>
+        )}
       </form>
     </div>
   );
