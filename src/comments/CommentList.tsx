@@ -67,6 +67,20 @@ export default function CommentList() {
     setEditCommentId(null);
   };
 
+  const handleDelete = async (commentId: number) => {
+    if (!confirm('Delete this comment?')) return;
+    const response = await deleteComment(id, commentId);
+
+    if (response.errors) {
+      setErrors(response.errors.error);
+      return;
+    }
+
+    const result = await getComments(id);
+    setComments(result.data || []);
+    setEditCommentId(null);
+  };
+
   const handleEdit = (commentId: number) => {
     setEditCommentId(commentId);
   };
@@ -89,6 +103,13 @@ export default function CommentList() {
               className="bg-yellow-500"
             >
               Update
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDelete(comment.id)}
+              className="bg-red-500"
+            >
+              Delete
             </button>
             {editCommentId === comment.id && (
               <CommentForm
