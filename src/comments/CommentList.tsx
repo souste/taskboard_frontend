@@ -55,14 +55,14 @@ export default function CommentList() {
   };
 
   const handleUpdate = async (values: CommentBody, commentId: number) => {
-    const response = await updateComment(values, commentId, taskId);
+    const response = await updateComment(values, commentId, id);
 
     if (response.errors) {
       setErrors(response.errors.error);
       return;
     }
 
-    const result = await getComments(taskId);
+    const result = await getComments(id);
     setComments(result.data || []);
     setEditCommentId(null);
   };
@@ -93,7 +93,8 @@ export default function CommentList() {
             {editCommentId === comment.id && (
               <CommentForm
                 comment={comment}
-                onSubmit={(values) => handleUpdate(values, comment.id, id)}
+                setEditCommentId={setEditCommentId}
+                onSubmit={(values) => handleUpdate(values, comment.id)}
               />
             )}
           </div>

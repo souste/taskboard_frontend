@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import type { Comment, CommentBody } from '../types/comment.types';
 
-export default function CommentForm({ comment, onSubmit }) {
+export default function CommentForm({ comment, onSubmit, setEditCommentId }) {
   const [values, setValues] = useState<CommentBody>({
     content: comment?.content ?? '',
   });
@@ -52,6 +52,9 @@ export default function CommentForm({ comment, onSubmit }) {
           />
         </div>
         <button className="bg-green-500">Submit</button>
+        <button type="button" onClick={() => setEditCommentId(null)}>
+          Cancel
+        </button>
       </form>
     </div>
   );
