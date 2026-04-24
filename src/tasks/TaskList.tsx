@@ -46,7 +46,6 @@ export default function TaskList({
           <TaskCard task={task} key={task.id} />
         ))}
 
-        <p>Add Another Task:</p>
         <TaskForm onSubmit={handleCreate} columnId={columnId} />
       </SortableContext>
     </div>
