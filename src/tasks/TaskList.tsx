@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import TaskForm from './TaskForm';
 import TaskCard from './TaskCard';
 import { createTask } from '../api/task';
@@ -13,6 +14,7 @@ export default function TaskList({
   columnId,
   activeTask,
 }: TaskListProps) {
+  const [formOpen, setFormOpen] = useState(false);
   const handleCreate = async (values: TaskBody) => {
     const tasksInColumn = tasks.filter((t) => t.column_id === columnId);
     const newPosition = tasksInColumn.length;
@@ -46,7 +48,13 @@ export default function TaskList({
           <TaskCard task={task} key={task.id} />
         ))}
 
-        <TaskForm onSubmit={handleCreate} columnId={columnId} />
+        <div onClick={() => setFormOpen(!formOpen)}>Add a card</div>
+
+        {formOpen && (
+          <div>
+            <TaskForm onSubmit={handleCreate} columnId={columnId} />
+          </div>
+        )}
       </SortableContext>
     </div>
   );

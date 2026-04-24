@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 type Values = {
   title: string;
-  description: string;
+  description: string | null;
   column_id: number | null;
 };
 
@@ -12,7 +12,7 @@ type Task = {
   user_id: number;
   column_id: number;
   title: string;
-  description: string;
+  description: string | null;
   position: number;
   created_at: string;
   updated_at: string;
@@ -80,16 +80,23 @@ export default function TaskForm({
             onChange={handleChange}
             placeholder="Task name"
           />
-          <input
-            name="description"
-            type="text"
-            value={values.description}
-            onChange={handleChange}
-            placeholder="Task description"
-          />
+
+          {task && (
+            <input
+              name="description"
+              type="text"
+              value={values.description}
+              onChange={handleChange}
+              placeholder="Task description"
+            />
+          )}
         </div>
         <button className="bg-green-500">Submit</button>
-        {task && <button onClick={() => setEditTask(false)}>Cancel</button>}
+        {task && (
+          <button type="button" onClick={() => setEditTask?.(false)}>
+            Cancel
+          </button>
+        )}
       </form>
     </div>
   );
