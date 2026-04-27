@@ -29,15 +29,17 @@ export default function ColumnCard({
         isOver ? 'bg-green-400' : 'bg-gray-300'
       }`}
     >
-      <div className="mb-4 flex items-center gap-2">
-        <div
-          {...dragAttributes}
-          {...dragListeners}
-          className="cursor-grab p-1 text-gray-500"
-        >
-          ⋮⋮
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div
+            {...dragAttributes}
+            {...dragListeners}
+            className="cursor-grab p-1 text-gray-500"
+          >
+            ⋮⋮
+          </div>
+          <p className="font-bold">{column.name}</p>
         </div>
-        <p className="font-bold">{column.name}</p>
 
         <div onClick={() => setDropDownOpen(!dropDownOpen)}>
           <MoreHorizontal />
@@ -63,13 +65,6 @@ export default function ColumnCard({
         )}
       </div>
 
-      <TaskList
-        tasks={tasks}
-        setTasks={setTasks}
-        columnId={column.id}
-        activeTask={activeTask}
-      />
-
       {editColumnId === column.id && (
         <ColumnForm
           column={column}
@@ -77,6 +72,13 @@ export default function ColumnCard({
           onSubmit={(values) => handleUpdate(column.id, values)}
         />
       )}
+
+      <TaskList
+        tasks={tasks}
+        setTasks={setTasks}
+        columnId={column.id}
+        activeTask={activeTask}
+      />
     </div>
   );
 }

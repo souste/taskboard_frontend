@@ -65,7 +65,9 @@ export default function ColumnForm({
               className="border bg-white"
             />
           </div>
-          <button className="bg-green-500">Submit</button>
+          <button className="cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400">
+            Submit
+          </button>
           {column && (
             <button onClick={() => setEditColumnId?.(null)}>Cancel</button>
           )}

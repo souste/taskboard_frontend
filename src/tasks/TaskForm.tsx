@@ -73,13 +73,14 @@ export default function TaskForm({
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col">
-          <input
+          <textarea
             name="title"
             type="text"
             value={values.title}
             onChange={handleChange}
-            placeholder="Task name"
-          />
+            placeholder="Enter a title"
+            className="mt-2 mb-2 block rounded bg-white px-2 py-1"
+          ></textarea>
 
           {task && (
             <input
@@ -91,7 +92,9 @@ export default function TaskForm({
             />
           )}
         </div>
-        <button className="bg-green-500">Submit</button>
+        <button className="cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400">
+          Submit
+        </button>
         {task && (
           <button type="button" onClick={() => setEditTask?.(false)}>
             Cancel

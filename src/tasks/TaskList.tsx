@@ -3,6 +3,7 @@ import TaskForm from './TaskForm';
 import TaskCard from './TaskCard';
 import { createTask } from '../api/task';
 import type { TaskListProps, TaskBody } from '../types/task.types';
+import { Plus } from 'lucide-react';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -48,7 +49,15 @@ export default function TaskList({
           <TaskCard task={task} key={task.id} />
         ))}
 
-        <div onClick={() => setFormOpen(!formOpen)}>Add a card</div>
+        <div
+          className="cursor-pointer rounded py-1 text-gray-700 transition hover:bg-gray-200 hover:text-gray-700"
+          onClick={() => setFormOpen(!formOpen)}
+        >
+          <div className="flex gap-1">
+            <Plus />
+            Add a card
+          </div>
+        </div>
 
         {formOpen && (
           <div>
