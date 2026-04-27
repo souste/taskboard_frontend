@@ -173,8 +173,7 @@ export default function SingleBoard() {
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
   return (
-    <>
-      <h1>MVP Board</h1>
+    <div className="justift-start flex px-10 py-10">
       <DndContext
         collisionDetection={rectIntersection}
         onDragStart={handleDragStart}
@@ -196,6 +195,6 @@ export default function SingleBoard() {
           ) : null}
         </DragOverlay>
       </DndContext>
-    </>
+    </div>
   );
 }

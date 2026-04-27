@@ -13,6 +13,7 @@ import {
   deleteColumn,
 } from '../api/column';
 import SortableColumn from './SortableColumn';
+import { Plus } from 'lucide-react';
 
 export default function Columns({
   columns,
@@ -22,6 +23,7 @@ export default function Columns({
   activeTask,
 }: ColumnProps) {
   const [editColumnId, setEditColumnId] = useState<number | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
 
   const handleCreate = async (values: ColumnBody) => {
     const position = columns.length;
@@ -78,9 +80,20 @@ export default function Columns({
             );
           })}
         </SortableContext>
-        <div className="w-64 rounded bg-gray-300/30 p-2">
-          <p className="mb-2">Add another List:</p>
-          <ColumnForm onSubmit={handleCreate} />
+        <div className="w-62 cursor-pointer self-start rounded bg-gray-200/40 p-2 transition hover:bg-gray-200/60">
+          <div
+            className="items-centre onClick={() => setFormOpen(!formOpen)} flex gap-2 text-gray-700"
+            onClick={() => setFormOpen(!formOpen)}
+          >
+            <Plus />
+            <p className="mb-2">Add another List</p>
+          </div>
+
+          {formOpen && (
+            <div>
+              <ColumnForm onSubmit={handleCreate} />
+            </div>
+          )}
         </div>
       </div>
     </div>

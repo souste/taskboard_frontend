@@ -56,14 +56,14 @@ export default function ColumnForm({
         {error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-2 flex flex-col gap-2">
-            <input
+            <textarea
               name="name"
               type="text"
               value={values.name}
               onChange={handleChange}
-              placeholder="Column name"
-              className="border bg-white"
-            />
+              placeholder="Enter list name"
+              className="bg-white px-1"
+            ></textarea>
           </div>
           <button className="cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400">
             Submit
