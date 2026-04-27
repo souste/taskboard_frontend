@@ -20,20 +20,22 @@ export default function TaskCard({ task }: TaskCardProps) {
       className="mb-3 block rounded bg-gray-100 p-3 shadow-md"
       style={style}
     >
-      <div
-        {...listeners}
-        {...attributes}
-        className="cursor-grab text-sm text-gray-500"
-      >
-        ⋮⋮
+      <div className="flex items-center gap-2">
+        <div
+          {...listeners}
+          {...attributes}
+          className="cursor-grab text-sm text-gray-500"
+        >
+          ⋮⋮
+        </div>
+        <Link to={`/tasks/${task.id}`}>
+          {transform ? (
+            <h3 className="font-semibold wrap-break-word">{task.title}</h3>
+          ) : (
+            <h3 className="font-semibold wrap-break-word">{task.title}</h3>
+          )}
+        </Link>
       </div>
-      <Link to={`/tasks/${task.id}`}>
-        {transform ? (
-          <h3 className="font-semibold wrap-break-word">{task.title}</h3>
-        ) : (
-          <h3 className="font-semibold wrap-break-word">{task.title}</h3>
-        )}
-      </Link>
     </div>
   );
 }
