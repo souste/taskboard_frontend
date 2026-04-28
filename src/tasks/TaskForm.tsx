@@ -79,17 +79,17 @@ export default function TaskForm({
             value={values.title}
             onChange={handleChange}
             placeholder="Enter a title"
-            className="mt-2 mb-2 block rounded bg-white px-2 py-1"
+            className="mt-2 mb-2 block rounded bg-white p-1 py-1"
           ></textarea>
 
           {task && (
-            <input
+            <textarea
               name="description"
               type="text"
               value={values.description}
               onChange={handleChange}
               placeholder="Task description"
-            />
+            ></textarea>
           )}
         </div>
         <button className="cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400">

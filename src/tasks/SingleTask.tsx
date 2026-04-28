@@ -4,6 +4,7 @@ import { getTask, updateTask, deleteTask } from '../api/task';
 import type { Task, TaskBody } from '../types/task.types';
 import TaskForm from './TaskForm';
 import CommentList from '../comments/CommentList';
+import { Plus } from 'lucide-react';
 
 export default function SingleTask({ taskId, refreshTasks }) {
   const [task, setTask] = useState<Task | null>(null);
@@ -68,23 +69,36 @@ export default function SingleTask({ taskId, refreshTasks }) {
 
   return (
     <div className="flex justify-center pt-10">
-      <div className="flex max-w-3xl gap-8 border p-6 wrap-break-word">
-        <div className="flex-1">
-          <h1 className="mb-4 text-2xl font-bold">{task?.title}</h1>
-          <p className="mb-3">Description:</p>
-          <p>{task?.description}</p>
-          <button className="bg-gray-500" onClick={() => navigate('/board')}>
-            Back
-          </button>
-          <button onClick={() => setEditTask(true)} className="bg-yellow-500">
-            Update
-          </button>
-          <button
-            onClick={() => task && handleDelete(task.id)}
-            className="bg-red-500"
-          >
-            Delete
-          </button>
+      <div className="flex w-full gap-10 p-6">
+        <div className="flex-1 pr-6">
+          {!editTask && (
+            <div className="mb-6">
+              <h1 className="mb-4 text-2xl font-bold">{task?.title}</h1>
+
+              <button
+                onClick={() => setEditTask(true)}
+                className="mb-4 rounded bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+              >
+                Edit Card
+              </button>
+
+              <button
+                onClick={() => task && handleDelete(task.id)}
+                className="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
+              >
+                Delete
+              </button>
+
+              <p className="mb-1 text-xs font-semibold text-gray-500 uppercase">
+                Description:
+              </p>
+
+              <p className="leading-relaxed whitespace-pre-wrap text-gray-800">
+                {task?.description}
+              </p>
+            </div>
+          )}
+
           {editTask && (
             <TaskForm
               task={task}
@@ -93,7 +107,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
             />
           )}
         </div>
-        <div>
+        <div className="w-64">
           <div>
             <CommentList taskId={id} />
           </div>
