@@ -42,7 +42,13 @@ export default function SingleTask({ taskId }) {
   }, [id]);
 
   const handleUpdate = async (id: number, values: TaskBody) => {
-    await updateTask(id, values);
+    if (!task) return;
+    await updateTask(id, {
+      title: values.title,
+      description: values.description,
+      position: task?.position,
+      column_id: task.column_id,
+    });
     const result = await getTask(id);
     setTask(result.data || null);
   };
@@ -85,7 +91,7 @@ export default function SingleTask({ taskId }) {
         </div>
         <div>
           <div>
-            <CommentList taskId={taskId} />
+            <CommentList taskId={id} />
           </div>
           <p>
             Task Created:
