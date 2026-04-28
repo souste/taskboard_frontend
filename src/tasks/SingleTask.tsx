@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getTask, updateTask, deleteTask } from '../api/task';
 import type { Task, TaskBody } from '../types/task.types';
 import TaskForm from './TaskForm';
 import CommentList from '../comments/CommentList';
 
-export default function SingleTask() {
+export default function SingleTask({ taskId }) {
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
   const [editTask, setEditTask] = useState(false);
-  const { taskId } = useParams();
   const id = Number(taskId);
   const navigate = useNavigate();
 
@@ -86,7 +85,7 @@ export default function SingleTask() {
         </div>
         <div>
           <div>
-            <CommentList />
+            <CommentList taskId={taskId} />
           </div>
           <p>
             Task Created:

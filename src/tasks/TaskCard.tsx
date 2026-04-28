@@ -1,9 +1,13 @@
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { TaskCardProps } from '../types/task.types';
+import { useState } from 'react';
+import Modal from './Modal';
+import SingleTask from './SingleTask';
 
 export default function TaskCard({ task }: TaskCardProps) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: task.id.toString(),
@@ -28,14 +32,17 @@ export default function TaskCard({ task }: TaskCardProps) {
         >
           ⋮⋮
         </div>
-        <Link to={`/tasks/${task.id}`}>
-          {transform ? (
-            <h3 className="font-semibold wrap-break-word">{task.title}</h3>
-          ) : (
-            <h3 className="font-semibold wrap-break-word">{task.title}</h3>
-          )}
-        </Link>
+
+        <h3
+          onClick={() => setModalIsOpen(true)}
+          className="font-semibold wrap-break-word"
+        >
+          {task.title}
+        </h3>
       </div>
+      <Modal open={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+        <SingleTask taskId={task.id} />
+      </Modal>
     </div>
   );
 }

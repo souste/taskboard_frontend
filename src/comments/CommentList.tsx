@@ -9,12 +9,11 @@ import {
 import CommentForm from './CommentForm';
 import type { Comment, CommentBody } from '../types/comment.types';
 
-export default function CommentList() {
+export default function CommentList({ taskId }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
-  const { taskId } = useParams();
   const id = Number(taskId);
 
   useEffect(() => {
