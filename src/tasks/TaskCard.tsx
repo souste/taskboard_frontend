@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Modal from './Modal';
 import SingleTask from './SingleTask';
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function TaskCard({ task, refreshTasks }: TaskCardProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -41,7 +41,7 @@ export default function TaskCard({ task }: TaskCardProps) {
         </h3>
       </div>
       <Modal open={modalIsOpen} onClose={() => setModalIsOpen(false)}>
-        <SingleTask taskId={task.id} />
+        <SingleTask taskId={task.id} refreshTasks={refreshTasks} />
       </Modal>
     </div>
   );

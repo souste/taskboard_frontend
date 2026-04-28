@@ -5,7 +5,7 @@ import type { Task, TaskBody } from '../types/task.types';
 import TaskForm from './TaskForm';
 import CommentList from '../comments/CommentList';
 
-export default function SingleTask({ taskId }) {
+export default function SingleTask({ taskId, refreshTasks }) {
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
@@ -51,6 +51,10 @@ export default function SingleTask({ taskId }) {
     });
     const result = await getTask(id);
     setTask(result.data || null);
+
+    if (refreshTasks) {
+      await refreshTasks();
+    }
   };
 
   const handleDelete = async (id: number) => {

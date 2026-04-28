@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import TaskForm from './TaskForm';
 import TaskCard from './TaskCard';
-import { createTask } from '../api/task';
+import { getTasks, createTask } from '../api/task';
 import type { TaskListProps, TaskBody } from '../types/task.types';
 import { Plus } from 'lucide-react';
 import {
@@ -30,6 +30,11 @@ export default function TaskList({
     setTasks((prev) => [...prev, newTask]);
   };
 
+  const refreshTasks = async () => {
+    const result = await getTasks();
+    setTasks(result.data);
+  };
+
   const tasksInColumn = tasks
     .filter((task) => task.column_id === columnId)
     .sort((a, b) => a.position - b.position);
@@ -46,7 +51,7 @@ export default function TaskList({
         strategy={verticalListSortingStrategy}
       >
         {tasksInColumn.map((task) => (
-          <TaskCard task={task} key={task.id} />
+          <TaskCard task={task} key={task.id} refreshTasks={refreshTasks} />
         ))}
 
         <div
