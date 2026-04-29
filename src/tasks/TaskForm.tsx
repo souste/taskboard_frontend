@@ -23,6 +23,7 @@ type TaskFormProps = {
   task: Task | null;
   columnId: number;
   setEditTask?: (value: boolean) => void;
+  mode?: 'create' | 'edit';
 };
 
 export default function TaskForm({
@@ -30,6 +31,7 @@ export default function TaskForm({
   setEditTask,
   onSubmit,
   columnId,
+  mode = 'create',
 }: TaskFormProps) {
   const [values, setValues] = useState<Values>({
     title: task?.title ?? '',
@@ -56,50 +58,73 @@ export default function TaskForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     onSubmit(values);
-    if (!task) {
+
+    if (mode === 'create') {
       setValues({
         title: '',
         description: '',
         column_id: columnId,
       });
     }
-    setEditTask?.(false);
+
+    if (mode === 'edit') {
+      setEditTask?.(false);
+    }
   };
 
   return (
-    <div>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col">
-          <textarea
-            name="title"
-            type="text"
-            value={values.title}
-            onChange={handleChange}
-            placeholder="Enter a title"
-            className="mt-2 mb-2 block rounded bg-white p-1 py-1"
-          ></textarea>
+    <div className={mode === 'edit' ? 'space-y-4' : 'space-y-2'}>
+      {error && <p className="text-red-500">{error}</p>}
 
-          {task && (
-            <textarea
-              name="description"
-              type="text"
-              value={values.description}
-              onChange={handleChange}
-              placeholder="Task description"
-            ></textarea>
+      <form
+        className={mode === 'edit' ? 'flex flex-col gap-4' : 'flex flex-col'}
+        onSubmit={handleSubmit}
+      >
+        <textarea
+          name="title"
+          type="text"
+          value={values.title}
+          onChange={handleChange}
+          placeholder="Enter a title"
+          className={
+            mode === 'edit'
+              ? 'w-full rounded border p-2 text-lg'
+              : 'mt-2 mb-2 block rounded bg-white p-1 py-1'
+          }
+        ></textarea>
+
+        {mode === 'edit' && (
+          <textarea
+            name="description"
+            type="text"
+            value={values.description}
+            onChange={handleChange}
+            placeholder="Task description"
+            className="w-full rounded border p-2 text-base"
+          ></textarea>
+        )}
+
+        <div className={mode === 'edit' ? 'flex gap-3' : ''}>
+          <button
+            className={
+              mode === 'edit'
+                ? 'rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-400'
+                : 'cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400'
+            }
+          >
+            Submit
+          </button>
+          {mode === 'edit' && (
+            <button
+              type="button"
+              onClick={() => setEditTask?.(false)}
+              className="rounded bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+            >
+              Cancel
+            </button>
           )}
         </div>
-        <button className="cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400">
-          Submit
-        </button>
-        {task && (
-          <button type="button" onClick={() => setEditTask?.(false)}>
-            Cancel
-          </button>
-        )}
       </form>
     </div>
   );

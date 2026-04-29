@@ -101,7 +101,9 @@ export default function SingleTask({ taskId, refreshTasks }) {
 
           {editTask && (
             <TaskForm
+              mode="edit"
               task={task}
+              columnId={task?.column_id}
               setEditTask={setEditTask}
               onSubmit={(values) => handleUpdate(id, values)}
             />

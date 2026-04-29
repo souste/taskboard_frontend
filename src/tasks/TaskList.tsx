@@ -66,7 +66,11 @@ export default function TaskList({
 
         {formOpen && (
           <div>
-            <TaskForm onSubmit={handleCreate} columnId={columnId} />
+            <TaskForm
+              mode="create"
+              onSubmit={handleCreate}
+              columnId={columnId}
+            />
           </div>
         )}
       </SortableContext>
