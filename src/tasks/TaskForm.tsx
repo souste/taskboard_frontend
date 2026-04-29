@@ -1,5 +1,10 @@
-import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
+import type {
+  Task,
+  TaskBody,
+  ChangeEvent,
+  FormEvent,
+} from '../types/task.types';
 
 type Values = {
   title: string;
@@ -48,7 +53,9 @@ export default function TaskForm({
     });
   }, [task, columnId]);
 
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+  ) => {
     const { name, value } = event.target;
     setValues((prev) => ({
       ...prev,
@@ -58,7 +65,14 @@ export default function TaskForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!values.title.trim()) {
+      setError('A title is required');
+      return;
+    }
+
     onSubmit(values);
+    setError(' ');
 
     if (mode === 'create') {
       setValues({
@@ -66,63 +80,70 @@ export default function TaskForm({
         description: '',
         column_id: columnId,
       });
-    }
-
-    if (mode === 'edit') {
+    } else {
       setEditTask?.(false);
     }
   };
 
+  const isEdit = mode === 'edit';
+
   return (
-    <div className={mode === 'edit' ? 'space-y-4' : 'space-y-2'}>
-      {error && <p className="text-red-500">{error}</p>}
+    <div className={isEdit ? 'w-full' : 'p-1'}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        {error && <p className="text-xs font-bold text-red-500">{error}</p>}
 
-      <form
-        className={mode === 'edit' ? 'flex flex-col gap-4' : 'flex flex-col'}
-        onSubmit={handleSubmit}
-      >
-        <textarea
-          name="title"
-          type="text"
-          value={values.title}
-          onChange={handleChange}
-          placeholder="Enter a title"
-          className={
-            mode === 'edit'
-              ? 'w-full rounded border p-2 text-lg'
-              : 'mt-2 mb-2 block rounded bg-white p-1 py-1'
-          }
-        ></textarea>
-
-        {mode === 'edit' && (
+        <div className={isEdit ? 'space-y-4' : 'space-y-1'}>
           <textarea
-            name="description"
-            type="text"
-            value={values.description}
+            name="title"
+            value={values.title}
             onChange={handleChange}
-            placeholder="Task description"
-            className="w-full rounded border p-2 text-base"
-          ></textarea>
-        )}
-
-        <div className={mode === 'edit' ? 'flex gap-3' : ''}>
-          <button
-            className={
-              mode === 'edit'
-                ? 'rounded bg-slate-800 px-4 py-2 font-semibold text-white transition-colors hover:bg-slate-700'
-                : 'cursor-pointer rounded bg-slate-800 px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-slate-700'
+            placeholder={
+              isEdit ? 'Task Title' : 'Enter a title for this card...'
             }
+            rows={1}
+            className={`w-full resize-none overflow-hidden rounded-md border-none bg-white p-2 text-sm shadow-sm ring-1 ring-slate-200 ring-inset focus:ring-2 focus:ring-slate-800 ${
+              isEdit ? 'text-lg font-bold' : 'text-sm font-medium'
+            }`}
+          />
+
+          {isEdit && (
+            <textarea
+              name="description"
+              value={values.description ?? ''}
+              onChange={handleChange}
+              placeholder="Add a more detailed description..."
+              rows={4}
+              className="w-full resize-none rounded-md border-none bg-slate-50 p-3 text-sm text-slate-700 shadow-inner ring-1 ring-slate-200 ring-inset focus:ring-2 focus:ring-slate-800"
+            />
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="submit"
+            className={`rounded-md bg-slate-800 px-4 py-1.5 text-xs font-bold text-white transition-all hover:bg-slate-900 active:scale-95`}
           >
-            Submit
+            {isEdit ? 'Save Changes' : 'Add Card'}
           </button>
-          {mode === 'edit' && (
+
+          {isEdit ? (
             <button
               type="button"
               onClick={() => setEditTask?.(false)}
-              className="rounded bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+              className="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800"
             >
               Cancel
             </button>
+          ) : (
+            values.title.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setValues({ ...values, title: '' })}
+                className="text-xs text-slate-400 hover:text-red-500"
+              >
+                Clear
+              </button>
+            )
           )}
         </div>
       </form>

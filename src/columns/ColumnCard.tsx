@@ -43,29 +43,43 @@ export default function ColumnCard({
           <p className="font-semibold text-gray-800">{column.name}</p>
         </div>
 
-        <div
-          className="cursor-pointer text-gray-500 hover:text-gray-700"
-          onClick={() => setDropDownOpen(!dropDownOpen)}
-        >
-          <MoreHorizontal />
-        </div>
-
-        {dropDownOpen && (
-          <div className="absolute right-4 z-10 mt-10 space-y-2 rounded-md bg-white p-2 shadow-md">
-            <button
-              onClick={() => handleEdit(column.id)}
-              className="block w-full rounded bg-yellow-400 px-3 py-1 text-sm font-medium hover:bg-yellow-300"
-            >
-              Update
-            </button>
-            <button
-              onClick={() => handleDelete(column.id)}
-              className="block w-full rounded bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-400"
-            >
-              Delete
-            </button>
+        <div className="relative">
+          <div
+            className="cursor-pointer text-gray-400 transition-colors hover:text-slate-700"
+            onClick={() => setDropDownOpen(!dropDownOpen)}
+          >
+            <MoreHorizontal />
           </div>
-        )}
+
+          {dropDownOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setDropDownOpen(false)}
+              />
+              <div className="ring-opacity-5 absolute right-0 z-20 mt-2 w-32 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black focus:outline-none">
+                <button
+                  onClick={() => {
+                    handleEdit(column.id);
+                    setDropDownOpen(false);
+                  }}
+                  className="flex w-full items-center rounded-sm px-3 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-100"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => {
+                    handleDelete(column.id);
+                    setDropDownOpen(false);
+                  }}
+                  className="flex w-full items-center rounded-sm px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
+                >
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {editColumnId === column.id && (

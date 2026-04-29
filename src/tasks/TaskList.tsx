@@ -58,7 +58,7 @@ export default function TaskList({
           className="mt-1 flex cursor-pointer items-center gap-1 rounded px-2 py-1 text-gray-600 transition hover:bg-gray-200"
           onClick={() => setFormOpen(!formOpen)}
         >
-          <div className="flex gap-1">
+          <div className="flex items-center gap-1">
             <Plus size={16} />
             <span>Add a card</span>
           </div>

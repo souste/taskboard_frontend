@@ -8,6 +8,7 @@ import {
 } from '../api/comment';
 import CommentForm from './CommentForm';
 import type { Comment, CommentBody } from '../types/comment.types';
+import { MessageSquare, Clock } from 'lucide-react';
 
 export default function CommentList({ taskId }) {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -38,7 +39,7 @@ export default function CommentList({ taskId }) {
       }
     };
     fetchComments();
-  }, [taskId]);
+  }, [taskId, id]);
 
   const handleCreate = async (values: CommentBody) => {
     const response = await createComment(values, id);
@@ -88,40 +89,85 @@ export default function CommentList({ taskId }) {
   if (errors) return <p>{errors}</p>;
 
   return (
-    <div>
-      <div>Comments:</div>
-      <div>
-        {comments.map((comment) => (
-          <div key={comment.id}>
-            <div>{comment.content}</div>
-            <div>
-              Comment Created: {new Date(comment.created_at).toLocaleString()}
-            </div>
-            <button
-              onClick={() => handleEdit(comment.id)}
-              className="bg-yellow-500"
-            >
-              Update
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDelete(comment.id)}
-              className="bg-red-500"
-            >
-              Delete
-            </button>
-            {editCommentId === comment.id && (
-              <CommentForm
-                comment={comment}
-                setEditCommentId={setEditCommentId}
-                onSubmit={(values) => handleUpdate(values, comment.id)}
-              />
-            )}
-          </div>
-        ))}
+    <div className="space-y-6">
+      <div className="flex items-center gap-2 pb-2">
+        <MessageSquare size={18} className="text-slate-400" />
+        <h3 className="text-sm font-bold tracking-widest text-slate-400 uppercase">
+          Activity ({comments.length})
+        </h3>
       </div>
-      <div>Create Comment:</div>
-      <CommentForm onSubmit={handleCreate} />
+
+      {errors && (
+        <p className="rounded bg-red-50 p-2 text-xs font-medium text-red-600">
+          {errors}
+        </p>
+      )}
+
+      <div className="space-y-4">
+        {comments.length === 0 ? (
+          <p className="text-sm text-slate-400 italic">No comments yet.</p>
+        ) : (
+          comments.map((comment) => (
+            <div key={comment.id} className="group relative flex gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-500">
+                U
+              </div>
+
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-slate-700">
+                      User
+                    </span>
+                    <span className="flex items-center gap-1 text-[10px] text-slate-400">
+                      <Clock size={10} />
+                      {new Date(comment.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <button
+                      onClick={() => setEditCommentId(comment.id)}
+                      className="text-[11px] font-semibold text-slate-400 hover:text-slate-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(comment.id)}
+                      className="text-[11px] font-semibold text-red-400 hover:text-red-600"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                {editCommentId === comment.id ? (
+                  <div className="mt-2 rounded-lg border border-slate-200 bg-white p-2">
+                    <CommentForm
+                      comment={comment}
+                      setEditCommentId={setEditCommentId}
+                      onSubmit={(values) => handleUpdate(values, comment.id)}
+                    />
+                  </div>
+                ) : (
+                  <div className="rounded-2xl rounded-tl-none bg-slate-50 px-4 py-2 text-sm text-slate-700">
+                    {comment.content}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="mt-8 pt-4">
+        <p className="mb-3 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+          Leave a comment
+        </p>
+        <div className="rounded-xl border border-slate-200 bg-white p-1 shadow-sm transition-colors focus-within:border-slate-400">
+          <CommentForm onSubmit={handleCreate} />
+        </div>
+      </div>
     </div>
   );
 }
