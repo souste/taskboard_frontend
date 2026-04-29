@@ -25,8 +25,10 @@ export default function ColumnCard({
   return (
     <div
       ref={setNodeRef}
-      className={`w-72 rounded-lg p-3 shadow-sm transition ${
-        isOver ? 'bg-green-200' : 'bg-gray-50'
+      className={`w-72 rounded-lg border p-3 transition-all duration-200 ${
+        isOver
+          ? 'border-orange-300 bg-orange-50 shadow-md'
+          : 'border-transparent bg-white shadow-sm'
       }`}
     >
       <div className="mb-3 flex items-center justify-between">

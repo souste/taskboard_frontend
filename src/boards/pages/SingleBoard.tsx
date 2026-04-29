@@ -173,7 +173,7 @@ export default function SingleBoard() {
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
   return (
-    <div className="justift-start flex px-10 py-10">
+    <div className="flex min-h-screen justify-start bg-slate-100 p-10">
       <DndContext
         collisionDetection={rectIntersection}
         onDragStart={handleDragStart}

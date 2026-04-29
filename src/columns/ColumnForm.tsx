@@ -71,12 +71,13 @@ export default function ColumnForm({
       ></input>
 
       <div className="flex gap-2"></div>
-      <button className="rounded bg-blue-500 px-3 py-1 text-sm font-semibold text-white hover:bg-blue-400">
-        Submit
+      <button className="flex-1 rounded bg-slate-800 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-slate-700">
+        {column ? 'Update List' : 'Add List'}
       </button>
       {column && (
         <button
-          className="rounded bg-gray-200 px-2 py-1 text-sm text-gray-700 hover:bg-gray-300"
+          type="button"
+          className="rounded bg-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-300"
           onClick={() => setEditColumnId?.(null)}
         >
           Cancel

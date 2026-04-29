@@ -48,7 +48,7 @@ export default function TaskForm({
     });
   }, [task, columnId]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setValues((prev) => ({
       ...prev,
@@ -109,8 +109,8 @@ export default function TaskForm({
           <button
             className={
               mode === 'edit'
-                ? 'rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-400'
-                : 'cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400'
+                ? 'rounded bg-slate-800 px-4 py-2 font-semibold text-white transition-colors hover:bg-slate-700'
+                : 'cursor-pointer rounded bg-slate-800 px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-slate-700'
             }
           >
             Submit
