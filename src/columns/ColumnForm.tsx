@@ -41,6 +41,13 @@ export default function ColumnForm({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!values.name.trim()) {
+      setError('Column name cannot be empty');
+      return;
+    }
+
+    setError('');
+
     onSubmit(values);
     if (!column) {
       setValues({
@@ -51,28 +58,30 @@ export default function ColumnForm({
     setEditColumnId?.(null);
   };
   return (
-    <div>
-      <div className="flex flex-col">
-        {error && <p>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-2 flex flex-col gap-2">
-            <textarea
-              name="name"
-              type="text"
-              value={values.name}
-              onChange={handleChange}
-              placeholder="Enter list name"
-              className="bg-white px-1"
-            ></textarea>
-          </div>
-          <button className="cursor-pointer rounded bg-blue-500 px-2 py-1 font-semibold text-white transition-colors hover:bg-blue-400">
-            Submit
-          </button>
-          {column && (
-            <button onClick={() => setEditColumnId?.(null)}>Cancel</button>
-          )}
-        </form>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="mt-2 flex flex-col gap-2">
+      {error && <p className="text-sm text-red-500">{error}</p>}
+
+      <input
+        name="name"
+        type="text"
+        value={values.name}
+        onChange={handleChange}
+        placeholder="Enter list name"
+        className="rounded bg-white p-1 text-sm"
+      ></input>
+
+      <div className="flex gap-2"></div>
+      <button className="rounded bg-blue-500 px-3 py-1 text-sm font-semibold text-white hover:bg-blue-400">
+        Submit
+      </button>
+      {column && (
+        <button
+          className="rounded bg-gray-200 px-2 py-1 text-sm text-gray-700 hover:bg-gray-300"
+          onClick={() => setEditColumnId?.(null)}
+        >
+          Cancel
+        </button>
+      )}
+    </form>
   );
 }

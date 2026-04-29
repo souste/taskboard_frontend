@@ -45,7 +45,7 @@ export default function TaskList({
       : tasksInColumn.map((t) => t.id.toString());
 
   return (
-    <div>
+    <div className="rounded-lg bg-gray-50 p-3 shadow-sm">
       <SortableContext
         items={sortableItems}
         strategy={verticalListSortingStrategy}
@@ -55,12 +55,12 @@ export default function TaskList({
         ))}
 
         <div
-          className="cursor-pointer rounded py-1 text-gray-700 transition hover:bg-gray-200 hover:text-gray-700"
+          className="mt-1 flex cursor-pointer items-center gap-1 rounded px-2 py-1 text-gray-600 transition hover:bg-gray-200"
           onClick={() => setFormOpen(!formOpen)}
         >
           <div className="flex gap-1">
-            <Plus />
-            Add a card
+            <Plus size={16} />
+            <span>Add a card</span>
           </div>
         </div>
 

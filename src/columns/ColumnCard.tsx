@@ -25,42 +25,43 @@ export default function ColumnCard({
   return (
     <div
       ref={setNodeRef}
-      className={`w-64 rounded bg-gray-300 p-2 ${
-        isOver ? 'bg-green-400' : 'bg-gray-300'
+      className={`w-72 rounded-lg p-3 shadow-sm transition ${
+        isOver ? 'bg-green-200' : 'bg-gray-50'
       }`}
     >
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div
             {...dragAttributes}
             {...dragListeners}
-            className="cursor-grab p-1 text-gray-500"
+            className="cursor-grab text-lg text-gray-400 select-none"
           >
             ⋮⋮
           </div>
-          <p className="font-bold">{column.name}</p>
+          <p className="font-semibold text-gray-800">{column.name}</p>
         </div>
 
-        <div onClick={() => setDropDownOpen(!dropDownOpen)}>
+        <div
+          className="cursor-pointer text-gray-500 hover:text-gray-700"
+          onClick={() => setDropDownOpen(!dropDownOpen)}
+        >
           <MoreHorizontal />
         </div>
 
         {dropDownOpen && (
-          <div>
-            <div className="space-x-4">
-              <button
-                onClick={() => handleEdit(column.id)}
-                className="bg-yellow-500"
-              >
-                Update
-              </button>
-              <button
-                onClick={() => handleDelete(column.id)}
-                className="bg-red-500"
-              >
-                Delete
-              </button>
-            </div>
+          <div className="absolute right-4 z-10 mt-10 space-y-2 rounded-md bg-white p-2 shadow-md">
+            <button
+              onClick={() => handleEdit(column.id)}
+              className="block w-full rounded bg-yellow-400 px-3 py-1 text-sm font-medium hover:bg-yellow-300"
+            >
+              Update
+            </button>
+            <button
+              onClick={() => handleDelete(column.id)}
+              className="block w-full rounded bg-red-500 px-3 py-1 text-sm font-medium text-white hover:bg-red-400"
+            >
+              Delete
+            </button>
           </div>
         )}
       </div>

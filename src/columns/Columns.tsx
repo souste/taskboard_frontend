@@ -80,9 +80,9 @@ export default function Columns({
             );
           })}
         </SortableContext>
-        <div className="w-62 cursor-pointer self-start rounded bg-gray-200/40 p-2 transition hover:bg-gray-200/60">
+        <div className="w-72 cursor-pointer self-start rounded-lg bg-gray-100 p-3 shadow-sm transition hover:bg-gray-200">
           <div
-            className="items-centre onClick={() => setFormOpen(!formOpen)} flex gap-2 text-gray-700"
+            className="flex items-center gap-2 text-gray-700"
             onClick={() => setFormOpen(!formOpen)}
           >
             <Plus />

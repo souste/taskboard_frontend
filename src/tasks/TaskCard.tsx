@@ -21,7 +21,7 @@ export default function TaskCard({ task, refreshTasks }: TaskCardProps) {
   return (
     <div
       ref={setNodeRef}
-      className="mb-3 block rounded bg-gray-100 p-3 shadow-md"
+      className="mb-3 w-full cursor-pointer rounded bg-white p-2 shadow-sm transition-shadow hover:shadow-md"
       style={style}
     >
       <div className="flex items-center gap-2">
@@ -35,7 +35,7 @@ export default function TaskCard({ task, refreshTasks }: TaskCardProps) {
 
         <h3
           onClick={() => setModalIsOpen(true)}
-          className="cursor-pointer font-semibold wrap-break-word"
+          className="font-semibold break-words text-gray-800"
         >
           {task.title}
         </h3>
