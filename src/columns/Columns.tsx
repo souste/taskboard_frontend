@@ -85,18 +85,26 @@ export default function Columns({
             );
           })}
         </SortableContext>
-        <div className="w-72 cursor-pointer self-start rounded-lg bg-gray-100 p-3 shadow-sm transition hover:bg-gray-200">
-          <div
-            className="flex items-center gap-2 text-gray-700"
+        <div className="w-72 self-start rounded-lg bg-gray-100 p-3 shadow-sm transition hover:bg-gray-200">
+          <button
+            type="button"
+            className="flex w-full items-center gap-2 text-gray-700 focus:outline-none"
             onClick={() => setFormOpen(!formOpen)}
           >
-            <Plus />
-            <p className="mb-2">Add another List</p>
-          </div>
+            <Plus size={20} />
+            <span className="font-medium">
+              {columns.length === 0
+                ? 'Add your first List'
+                : 'Add another List'}
+            </span>
+          </button>
 
           {formOpen && (
-            <div>
-              <ColumnForm onSubmit={handleCreate} />
+            <div className="mt-3">
+              <ColumnForm
+                onSubmit={handleCreate}
+                onCancel={() => setFormOpen(false)}
+              />
             </div>
           )}
         </div>

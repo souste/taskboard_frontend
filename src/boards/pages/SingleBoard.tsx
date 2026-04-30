@@ -174,27 +174,49 @@ export default function SingleBoard() {
   if (errors) return <p>{errors}</p>;
   return (
     <div className="flex min-h-screen justify-start bg-slate-100 p-10">
-      <DndContext
-        collisionDetection={rectIntersection}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
-        <Columns
-          columns={columns}
-          setColumns={setColumns}
-          tasks={tasks}
-          setTasks={setTasks}
-          activeTask={activeTask}
-        />
+      {columns.length === 0 ? (
+        <div className="flex w-full flex-col items-center justify-center space-y-4 rounded-xl border-2 border-dashed border-slate-300 p-20 text-center">
+          <div className="rounded-full bg-slate-200 p-4">📋</div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">
+              Your board is empty
+            </h2>
+            <p className="text-slate-600">
+              Create your first list to start organizing your tasks!
+            </p>
+          </div>
 
-        <DragOverlay>
-          {activeTask ? (
-            <div className="mb-3 rounded bg-gray-100 p-3 shadow-md">
-              <h3 className="font-semibold">{activeTask.title}</h3>
-            </div>
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+          <Columns
+            columns={columns}
+            setColumns={setColumns}
+            tasks={tasks}
+            setTasks={setTasks}
+            activeTask={activeTask}
+          />
+        </div>
+      ) : (
+        <DndContext
+          collisionDetection={rectIntersection}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <Columns
+            columns={columns}
+            setColumns={setColumns}
+            tasks={tasks}
+            setTasks={setTasks}
+            activeTask={activeTask}
+          />
+
+          <DragOverlay>
+            {activeTask ? (
+              <div className="mb-3 rounded bg-gray-100 p-3 shadow-md">
+                <h3 className="font-semibold">{activeTask.title}</h3>
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      )}
     </div>
   );
 }
