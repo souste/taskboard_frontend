@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 import {
   getComments,
@@ -16,6 +17,7 @@ export default function CommentList({ taskId }) {
   const [errors, setErrors] = useState('');
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
   const id = Number(taskId);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (!taskId) return;
@@ -51,7 +53,12 @@ export default function CommentList({ taskId }) {
 
     const newComment = response.data;
     if (!newComment) return;
-    setComments((prev) => [...prev, newComment]);
+
+    const commentWithUserInfo = {
+      ...newComment,
+      username: user?.username || 'You',
+    };
+    setComments((prev) => [...prev, commentWithUserInfo]);
   };
 
   const handleUpdate = async (values: CommentBody, commentId: number) => {
@@ -81,10 +88,6 @@ export default function CommentList({ taskId }) {
     setEditCommentId(null);
   };
 
-  const handleEdit = (commentId: number) => {
-    setEditCommentId(commentId);
-  };
-
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
 
@@ -110,14 +113,14 @@ export default function CommentList({ taskId }) {
           comments.map((comment) => (
             <div key={comment.id} className="group relative flex gap-3">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-500">
-                U
+                {comment.username.charAt(0)}
               </div>
 
               <div className="flex-1 space-y-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-slate-700">
-                      User
+                      {comment.username || 'Unknown User'}
                     </span>
                     <span className="flex items-center gap-1 text-[10px] text-slate-400">
                       <Clock size={10} />
