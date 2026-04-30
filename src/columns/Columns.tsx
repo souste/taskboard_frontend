@@ -33,7 +33,12 @@ export default function Columns({
   };
 
   const handleUpdate = async (columnId: number, values: ColumnBody) => {
-    await updateColumn(columnId, values);
+    const currentColumn = columns.find((c) => c.id === columnId);
+
+    await updateColumn(columnId, {
+      ...values,
+      position: currentColumn?.position ?? 0,
+    });
     const result = await getColumns();
     setColumns(result.data || []);
   };
