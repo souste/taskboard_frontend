@@ -13,7 +13,7 @@ import {
   deleteColumn,
 } from '../api/column';
 import SortableColumn from './SortableColumn';
-import { Plus } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 
 export default function Columns({
   columns,
@@ -91,7 +91,7 @@ export default function Columns({
             className="flex w-full items-center gap-2 text-gray-700 focus:outline-none"
             onClick={() => setFormOpen(!formOpen)}
           >
-            <Plus size={20} />
+            {formOpen ? <Minus size={16} /> : <Plus size={16} />}
             <span className="font-medium">
               {columns.length === 0
                 ? 'Add your first List'

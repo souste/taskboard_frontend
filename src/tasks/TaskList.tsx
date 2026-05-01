@@ -3,7 +3,7 @@ import TaskForm from './TaskForm';
 import TaskCard from './TaskCard';
 import { getTasks, createTask } from '../api/task';
 import type { TaskListProps, TaskBody } from '../types/task.types';
-import { Plus } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -59,7 +59,8 @@ export default function TaskList({
           onClick={() => setFormOpen(!formOpen)}
         >
           <div className="flex items-center gap-1">
-            <Plus size={16} />
+            {formOpen ? <Minus size={16} /> : <Plus size={16} />}
+
             <span>Add a card</span>
           </div>
         </div>
