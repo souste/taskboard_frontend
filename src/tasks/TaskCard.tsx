@@ -35,7 +35,7 @@ export default function TaskCard({ task, refreshTasks }: TaskCardProps) {
 
         <h3
           onClick={() => setModalIsOpen(true)}
-          className="font-semibold break-words text-gray-800"
+          className="font-semibold break-all text-gray-800"
         >
           {task.title}
         </h3>
