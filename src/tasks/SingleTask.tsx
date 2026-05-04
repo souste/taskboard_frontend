@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTask, updateTask, deleteTask } from '../api/task';
+import { getTask, updateTask, deleteTask, toggleTask } from '../api/task';
 import type { Task, TaskBody } from '../types/task.types';
 import TaskForm from './TaskForm';
 import CommentList from '../comments/CommentList';
-import { Plus } from 'lucide-react';
 
 export default function SingleTask({ taskId, refreshTasks }) {
   const [task, setTask] = useState<Task | null>(null);
@@ -62,6 +61,20 @@ export default function SingleTask({ taskId, refreshTasks }) {
     if (!confirm('Are you sure you want to delete this task?')) return;
     await deleteTask(id);
     navigate('/board');
+  };
+
+  const handleToggle = async () => {
+    if (!task) return;
+    try {
+      const newStatus = !task.completed;
+      await toggleTask(task.id, { ...task, completed: newStatus });
+
+      setTask({ ...task, completed: newStatus });
+
+      if (refreshTasks) refreshTasks();
+    } catch (err) {
+      console.error('Failed to toggle status', err);
+    }
   };
 
   if (loading) return <p>Loading...</p>;
@@ -131,7 +144,28 @@ export default function SingleTask({ taskId, refreshTasks }) {
           <h4 className="mb-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
             Task Details
           </h4>
-          <div className="space-y-4">
+
+          <div className="space-y-6">
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-medium text-slate-400 uppercase">
+                Status
+              </span>
+              <label className="group flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={task?.completed || false}
+                  onChange={handleToggle}
+                  className="h-4 w-4 flex-shrink-0 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span
+                  className={`text-sm font-medium transition-colors ${
+                    task?.completed ? 'text-green-600' : 'text-slate-600'
+                  }`}
+                >
+                  {task?.completed ? 'Completed' : 'In Progress'}
+                </span>
+              </label>
+            </div>
             <div className="flex flex-col">
               <span className="text-[10px] font-medium text-slate-400 uppercase">
                 Task Created
