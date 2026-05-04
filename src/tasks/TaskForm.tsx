@@ -44,6 +44,7 @@ export default function TaskForm({
     title: task?.title ?? '',
     description: task?.description ?? '',
     column_id: task?.column_id ?? columnId,
+    completed: task?.completed ?? false,
   });
   const [error, setError] = useState('');
 
@@ -52,6 +53,7 @@ export default function TaskForm({
       title: task?.title ?? '',
       description: task?.description ?? '',
       column_id: task?.column_id ?? columnId,
+      completed: task?.completed ?? false,
     });
   }, [task, columnId]);
 
@@ -81,6 +83,7 @@ export default function TaskForm({
         title: '',
         description: '',
         column_id: columnId,
+        completed: false,
       });
     } else {
       setEditTask?.(false);
@@ -97,6 +100,7 @@ export default function TaskForm({
         <div className={isEdit ? 'space-y-4' : 'space-y-1'}>
           <textarea
             name="title"
+            maxLength={100}
             value={values.title}
             onChange={handleChange}
             placeholder={
@@ -111,6 +115,7 @@ export default function TaskForm({
           {isEdit && (
             <textarea
               name="description"
+              maxLength={500}
               value={values.description ?? ''}
               onChange={handleChange}
               placeholder="Add a more detailed description..."

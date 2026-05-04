@@ -25,7 +25,7 @@ export default function ColumnCard({
   return (
     <div
       ref={setNodeRef}
-      className={`flex max-h-[80vh] w-72 flex-col rounded-lg border p-3 transition-all duration-200 ${
+      className={`flex max-h-[80vh] w-80 flex-col rounded-lg border p-3 transition-all duration-200 ${
         isOver
           ? 'border-orange-300 bg-orange-50 shadow-md'
           : 'border-transparent bg-white shadow-sm'
