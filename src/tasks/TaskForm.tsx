@@ -9,6 +9,7 @@ import type {
 type Values = {
   title: string;
   description: string | null;
+  completed: boolean;
   column_id: number | null;
 };
 
@@ -18,6 +19,7 @@ type Task = {
   column_id: number;
   title: string;
   description: string | null;
+  completed: boolean;
   position: number;
   created_at: string;
   updated_at: string;
