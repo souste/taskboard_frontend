@@ -47,6 +47,7 @@ export default function CommentForm({
       <textarea
         name="content"
         rows={3}
+        maxLength={2000}
         value={values.content}
         onChange={handleChange}
         placeholder="Write a comment..."
