@@ -11,6 +11,7 @@ type TaskData = {
   column_id: number;
   title: string;
   description: string;
+  completed: boolean;
   position: number;
   created_at: string;
   updated_at: string;
@@ -184,6 +185,43 @@ export const deleteTask = async (
     return result;
   } catch (err) {
     console.error('Failed to delete column', err);
+    return {
+      success: false,
+      errors: { error: 'Network error. Please try again' },
+    };
+  }
+};
+
+export const toggleTask = async (
+  id: number,
+  taskData: TaskBody,
+): Promise<ApiResponse<TaskData | null>> => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const response = await fetch(`${API_BASE}/tasks/${id}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        errors: { error: result.message || 'Failed to update task' },
+      };
+    }
+    return result;
+  } catch (err) {
+    console.error('Failed to update task', err);
     return {
       success: false,
       errors: { error: 'Network error. Please try again' },
