@@ -10,6 +10,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
   const [editTask, setEditTask] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const id = Number(taskId);
   const navigate = useNavigate();
 
@@ -57,10 +58,24 @@ export default function SingleTask({ taskId, refreshTasks }) {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this task?')) return;
-    await deleteTask(id);
-    navigate('/board');
+  const handleDelete = (id: number) => {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!task) return;
+
+    try {
+      await deleteTask(task.id);
+      setShowDeleteModal(false);
+
+      if (refreshTasks) {
+        await refreshTasks();
+      }
+      navigate('/board');
+    } catch (err) {
+      console.error('Failed to delete', err);
+    }
   };
 
   const handleToggle = async () => {
@@ -97,7 +112,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
                 Edit
               </button>
               <button
-                onClick={() => task && handleDelete(task.id)}
+                onClick={handleDelete}
                 className="rounded-md bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
               >
                 Delete
@@ -179,6 +194,35 @@ export default function SingleTask({ taskId, refreshTasks }) {
           </div>
         </div>
       </div>
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl ring-1 ring-slate-200">
+            <h3 className="text-lg font-bold text-slate-800">Delete Task?</h3>
+            <p className="mt-2 text-sm text-slate-500">
+              Are you sure you want to delete{' '}
+              <span className="font-semibold text-slate-700">
+                "{task?.title}"
+              </span>
+              ? This action cannot be undone.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="rounded-md px-4 py-2 text-sm font-semibold text-slate-500 transition-colors hover:bg-slate-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-700 active:scale-95"
+              >
+                Delete Task
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
