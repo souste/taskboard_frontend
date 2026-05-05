@@ -209,11 +209,30 @@ export default function SingleBoard() {
           />
 
           <DragOverlay>
-            {activeTask ? (
-              <div className="mb-3 rounded bg-gray-100 p-3 shadow-md">
-                <h3 className="font-semibold">{activeTask.title}</h3>
+            {activeTask && (
+              <div className="mb-3 rounded-lg border border-slate-200 bg-white p-3 shadow-xl">
+                <h3 className="font-semibold text-slate-800">
+                  {activeTask.title}
+                </h3>
               </div>
-            ) : null}
+            )}
+
+            {activeColumn && (
+              <div className="flex h-[500px] w-80 rotate-3 flex-col rounded-lg border border-slate-300 bg-white p-3 shadow-2xl transition-transform">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="text-gray-400">⋮⋮</span>
+                  <p className="font-semibold text-gray-800">
+                    {activeColumn.name}
+                  </p>
+                </div>
+
+                <div className="space-y-2 opacity-40">
+                  <div className="h-14 w-full rounded-md bg-slate-100" />
+                  <div className="h-14 w-full rounded-md bg-slate-100" />
+                  <div className="h-14 w-full rounded-md bg-slate-100" />
+                </div>
+              </div>
+            )}
           </DragOverlay>
         </DndContext>
       )}
