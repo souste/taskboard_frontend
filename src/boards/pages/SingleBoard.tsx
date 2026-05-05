@@ -93,7 +93,9 @@ export default function SingleBoard() {
     if (activeCol) {
       setActiveColumn(null);
 
-      const overCol = columns.find((c) => c.id.toString() === over.id);
+      const overCol = columns.find(
+        (c) => c.id.toString() === over.id.toString(),
+      );
       if (!overCol) return;
 
       const oldIndex = columns.findIndex((c) => c.id === activeCol.id);
@@ -128,8 +130,10 @@ export default function SingleBoard() {
 
     let targetColumnId: number;
 
-    const overTask = tasks.find((t) => t.id.toString() === overId);
-    const overColumn = columns.find((c) => c.id.toString() === overId);
+    const overTask = tasks.find((t) => t.id.toString() === overId.toString());
+    const overColumn = columns.find(
+      (c) => c.id.toString() === overId.toString(),
+    );
 
     if (overTask) {
       targetColumnId = overTask.column_id;
@@ -181,8 +185,7 @@ export default function SingleBoard() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        delay: 250, // User must hold for 250ms to drag
-        tolerance: 5, // Allows for slight finger wiggle before canceling
+        distance: 8,
       },
     }),
     useSensor(KeyboardSensor),
