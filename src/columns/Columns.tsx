@@ -63,7 +63,11 @@ export default function Columns({
         >
           {columns.map((column) => {
             return (
-              <SortableColumn column={column} key={column.id}>
+              <SortableColumn
+                column={column}
+                key={column.id}
+                id={column.id.toString()}
+              >
                 {({ attributes, listeners }) => (
                   <ColumnCard
                     key={column.id}

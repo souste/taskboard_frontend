@@ -6,7 +6,7 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import {
   DndContext,
   DragOverlay,
-  rectIntersection,
+  closestCenter,
   useSensor,
   useSensors,
   PointerSensor,
@@ -185,7 +185,7 @@ export default function SingleBoard() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 3,
       },
     }),
     useSensor(KeyboardSensor),
@@ -217,7 +217,7 @@ export default function SingleBoard() {
         </div>
       ) : (
         <DndContext
-          collisionDetection={rectIntersection}
+          collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
           sensors={sensors}
