@@ -48,7 +48,6 @@ export default function Columns({
   };
 
   const handleDelete = async (columnId: number) => {
-    if (!confirm('Are you sure you want to delete this column?')) return;
     await deleteColumn(columnId);
     const result = await getColumns();
     setColumns(result.data || []);

@@ -19,9 +19,16 @@ export default function ColumnCard({
   dragListeners,
 }: ColumnCardProps) {
   const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { setNodeRef, isOver } = useDroppable({
     id: column.id.toString(),
   });
+
+  const confirmDelete = () => {
+    handleDelete(column.id);
+    setShowDeleteModal(false);
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -69,7 +76,7 @@ export default function ColumnCard({
                 </button>
                 <button
                   onClick={() => {
-                    handleDelete(column.id);
+                    setShowDeleteModal(true);
                     setDropDownOpen(false);
                   }}
                   className="flex w-full items-center rounded-sm px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
@@ -98,6 +105,36 @@ export default function ColumnCard({
           activeTask={activeTask}
         />
       </div>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl ring-1 ring-slate-200">
+            <h3 className="text-lg font-bold text-slate-800">Delete List?</h3>
+            <p className="mt-2 text-sm text-slate-500">
+              Are you sure you want to delete{' '}
+              <span className="font-semibold text-slate-700">
+                "{column.name}"
+              </span>
+              ? All tasks inside this list will be permanently removed.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="rounded-md px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-700 active:scale-95"
+              >
+                Delete List
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
