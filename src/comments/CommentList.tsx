@@ -16,6 +16,7 @@ export default function CommentList({ taskId }) {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState('');
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
+  const [deleteCommentId, setDeleteCommentId] = useState<number | null>(null);
   const id = Number(taskId);
   const { user } = useAuth();
 
@@ -74,18 +75,23 @@ export default function CommentList({ taskId }) {
     setEditCommentId(null);
   };
 
-  const handleDelete = async (commentId: number) => {
-    if (!confirm('Delete this comment?')) return;
-    const response = await deleteComment(id, commentId);
+  const openDeleteModal = (id: number) => {
+    setDeleteCommentId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteCommentId === null) return;
+    const response = await deleteComment(id, deleteCommentId);
 
     if (response.errors) {
       setErrors(response.errors.error);
+      setDeleteCommentId(null);
       return;
     }
 
     const result = await getComments(id);
     setComments(result.data || []);
-    setEditCommentId(null);
+    setDeleteCommentId(null);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -136,7 +142,7 @@ export default function CommentList({ taskId }) {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(comment.id)}
+                      onClick={() => openDeleteModal(comment.id)}
                       className="text-[11px] font-semibold text-red-400 hover:text-red-600"
                     >
                       Delete
@@ -171,6 +177,34 @@ export default function CommentList({ taskId }) {
           <CommentForm onSubmit={handleCreate} />
         </div>
       </div>
+      {deleteCommentId !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl ring-1 ring-slate-200">
+            <h3 className="text-lg font-bold text-slate-800">
+              Delete Comment?
+            </h3>
+            <p className="mt-2 text-sm text-slate-500">
+              Are you sure you want to remove this comment? This cannot be
+              undone.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteCommentId(null)}
+                className="rounded-md px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-700 active:scale-95"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
