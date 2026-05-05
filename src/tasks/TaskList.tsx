@@ -16,6 +16,7 @@ export default function TaskList({
   activeTask,
 }: TaskListProps) {
   const [formOpen, setFormOpen] = useState(false);
+
   const handleCreate = async (values: TaskBody) => {
     const tasksInColumn = tasks.filter((t) => t.column_id === columnId);
     const newPosition = tasksInColumn.length;
@@ -28,6 +29,7 @@ export default function TaskList({
     const newTask = response.data;
     if (!newTask) return;
     setTasks((prev) => [...prev, newTask]);
+    setFormOpen(false);
   };
 
   const refreshTasks = async () => {
@@ -66,7 +68,7 @@ export default function TaskList({
         </div>
 
         {formOpen && (
-          <div>
+          <div className="mt-2">
             <TaskForm
               mode="create"
               onSubmit={handleCreate}

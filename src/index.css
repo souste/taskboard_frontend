@@ -12,3 +12,8 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+.select-none {
+  -webkit-touch-callout: none;
+  user-select: none;
+}

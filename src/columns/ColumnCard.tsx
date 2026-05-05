@@ -36,8 +36,8 @@ export default function ColumnCard({
         isOver ? 'scale-[1.01] border-slate-200 shadow-md' : 'border-slate-100'
       }`}
     >
-      <div className="mb-3 flex shrink-0 items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="mb-3 flex shrink-0 items-start justify-between">
+        <div className="flex items-start gap-2">
           <div
             {...dragAttributes}
             {...dragListeners}
@@ -45,7 +45,9 @@ export default function ColumnCard({
           >
             ⋮⋮
           </div>
-          <p className="font-semibold text-gray-800">{column.name}</p>
+          <p className="text-sm font-semibold tracking-wide text-slate-600 uppercase">
+            {column.name}
+          </p>
         </div>
 
         <div className="relative">

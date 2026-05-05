@@ -57,16 +57,20 @@ export default function TaskCard({ task, refreshTasks }: TaskCardProps) {
           className="h-4 w-4 flex-shrink-0 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
         />
 
-        <h3
+        <div
           onClick={() => setModalIsOpen(true)}
-          className={`font-semibold break-all transition-all duration-200 ${
-            task.completed
-              ? 'text-gray-400 line-through opacity-60'
-              : 'text-gray-800'
-          }`}
+          className="flex-1 cursor-pointer py-1"
         >
-          {task.title}
-        </h3>
+          <h3
+            className={`text-[15px] font-medium break-all transition-all duration-200 ${
+              task.completed
+                ? 'text-gray-400 line-through opacity-60'
+                : 'text-gray-700'
+            }`}
+          >
+            {task.title}
+          </h3>
+        </div>
       </div>
       <Modal open={modalIsOpen} onClose={() => setModalIsOpen(false)}>
         <SingleTask taskId={task.id} refreshTasks={refreshTasks} />

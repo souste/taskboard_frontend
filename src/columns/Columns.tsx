@@ -30,6 +30,7 @@ export default function Columns({
     await createColumn({ ...values, position: position });
     const result = await getColumns();
     setColumns(result.data || []);
+    setFormOpen(false);
   };
 
   const handleUpdate = async (columnId: number, values: ColumnBody) => {

@@ -3,7 +3,15 @@ import { useState, useEffect } from 'react';
 import { getColumns, updateColumn } from '../../api/column';
 import { getTasks, updateTask } from '../../api/task';
 import type { DragEndEvent } from '@dnd-kit/core';
-import { DndContext, DragOverlay, rectIntersection } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragOverlay,
+  rectIntersection,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  KeyboardSensor,
+} from '@dnd-kit/core';
 import type { Column } from '../../types/column.types';
 import type { Task } from '../../types/task.types';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -170,10 +178,20 @@ export default function SingleBoard() {
     }
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        delay: 250, // User must hold for 250ms to drag
+        tolerance: 5, // Allows for slight finger wiggle before canceling
+      },
+    }),
+    useSensor(KeyboardSensor),
+  );
+
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
   return (
-    <div className="flex min-h-screen justify-start bg-slate-100 p-10">
+    <div className="custom-scrollbar flex h-screen w-full overflow-x-auto scroll-smooth bg-slate-100 p-4 md:p-10">
       {columns.length === 0 ? (
         <div className="flex w-full flex-col items-center justify-center space-y-4 rounded-xl border-2 border-dashed border-slate-300 p-20 text-center">
           <div className="rounded-full bg-slate-200 p-4">📋</div>
@@ -199,14 +217,17 @@ export default function SingleBoard() {
           collisionDetection={rectIntersection}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
-          <Columns
-            columns={columns}
-            setColumns={setColumns}
-            tasks={tasks}
-            setTasks={setTasks}
-            activeTask={activeTask}
-          />
+          <div className="flex snap-x snap-mandatory items-start gap-4 md:gap-6">
+            <Columns
+              columns={columns}
+              setColumns={setColumns}
+              tasks={tasks}
+              setTasks={setTasks}
+              activeTask={activeTask}
+            />
+          </div>
 
           <DragOverlay>
             {activeTask && (
