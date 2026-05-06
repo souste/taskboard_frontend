@@ -112,11 +112,18 @@ export default function SingleBoard() {
 
       setColumns(reindexed);
 
-      for (const col of reindexed) {
-        await updateColumn(col.id, {
-          name: col.name,
-          position: col.position,
-        });
+      try {
+        await Promise.all(
+          reindexed.map((col) =>
+            updateColumn(col.id, {
+              name: col.name,
+              position: col.position,
+            }),
+          ),
+        );
+        console.log('Columns synced!');
+      } catch (err) {
+        console.error('Column sync failed', err);
       }
 
       return;
@@ -172,13 +179,20 @@ export default function SingleBoard() {
 
     setTasks(finalTasks);
 
-    for (const task of reindexed) {
-      await updateTask(task.id, {
-        title: task.title,
-        description: task.description,
-        column_id: task.column_id,
-        position: task.position,
-      });
+    try {
+      await Promise.all(
+        reindexed.map((task) =>
+          updateTask(task.id, {
+            title: task.title,
+            description: task.description,
+            column_id: task.column_id,
+            position: task.position,
+          }),
+        ),
+      );
+      console.log('Sync complete!');
+    } catch (err) {
+      console.error('Batch sync failed', err);
     }
   };
 
