@@ -6,7 +6,7 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import {
   DndContext,
   DragOverlay,
-  closestCenter,
+  closestCorners,
   useSensor,
   useSensors,
   PointerSensor,
@@ -231,12 +231,12 @@ export default function SingleBoard() {
         </div>
       ) : (
         <DndContext
-          collisionDetection={closestCenter}
+          collisionDetection={closestCorners}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
-          <div className="flex snap-x snap-mandatory items-start gap-4 md:gap-6">
+          <div className="flex items-start gap-4 md:gap-6">
             <Columns
               columns={columns}
               setColumns={setColumns}
