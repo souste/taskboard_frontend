@@ -96,10 +96,10 @@ export default function SingleTask({ taskId, refreshTasks }) {
   if (errors) return <p>{errors}</p>;
 
   return (
-    <div className="flex h-[600px] max-h-[85vh] flex-col overflow-hidden">
+    <div className="flex h-full max-h-[85vh] w-full flex-col overflow-hidden md:h-[600px]">
       <div className="border-b border-slate-100 px-8 py-6">
         {!editTask ? (
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <h1 className="text-2xl font-bold tracking-tight text-slate-800">
               {task?.title}
             </h1>
@@ -107,13 +107,13 @@ export default function SingleTask({ taskId, refreshTasks }) {
             <div className="flex shrink-0 gap-2">
               <button
                 onClick={() => setEditTask(true)}
-                className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200"
+                className="flex-1 rounded-md bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200 md:flex-none md:px-3 md:py-1.5"
               >
                 Edit
               </button>
               <button
                 onClick={handleDelete}
-                className="rounded-md bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
+                className="flex-1 rounded-md bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100 md:flex-none md:px-3 md:py-1.5"
               >
                 Delete
               </button>
