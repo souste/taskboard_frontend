@@ -169,7 +169,7 @@ export default function CommentList({ taskId }) {
         )}
       </div>
 
-      <div className="mt-8 pt-4">
+      <div className="sticky bottom-0 mt-auto bg-white pt-4 pb-2">
         <p className="mb-3 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
           Leave a comment
         </p>

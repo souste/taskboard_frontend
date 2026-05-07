@@ -127,7 +127,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
       </div>
 
       <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
-        <div className="flex-1 overflow-y-auto px-8 py-6 pb-24">
+        <div className="flex-1 overflow-y-auto px-8 py-6 pb-40">
           {!editTask ? (
             <div className="space-y-8">
               <section>
