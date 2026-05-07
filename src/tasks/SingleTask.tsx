@@ -97,7 +97,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
 
   return (
     <div className="flex h-full max-h-[85vh] w-full flex-col overflow-hidden md:h-[600px]">
-      <div className="border-b border-slate-100 px-8 py-6">
+      <div className="shrink-0 border-b border-slate-100 px-8 py-6">
         {!editTask ? (
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <h1 className="text-2xl font-bold tracking-tight text-slate-800">
@@ -125,8 +125,9 @@ export default function SingleTask({ taskId, refreshTasks }) {
           </h1>
         )}
       </div>
+
       <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
-        <div className="flex-1 overflow-y-auto px-8 py-6">
+        <div className="flex-1 overflow-y-auto px-8 py-6 pb-24">
           {!editTask ? (
             <div className="space-y-8">
               <section>
