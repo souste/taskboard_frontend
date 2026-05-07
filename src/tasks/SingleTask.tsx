@@ -125,7 +125,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
           </h1>
         )}
       </div>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
         <div className="flex-1 overflow-y-auto px-8 py-6">
           {!editTask ? (
             <div className="space-y-8">
@@ -155,12 +155,12 @@ export default function SingleTask({ taskId, refreshTasks }) {
           )}
         </div>
 
-        <div className="w-64 border-l border-slate-100 bg-slate-50/50 px-6 py-8">
+        <div className="w-full border-t border-slate-100 bg-slate-50/50 px-6 py-8 md:w-64 md:border-t-0 md:border-l">
           <h4 className="mb-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
             Task Details
           </h4>
 
-          <div className="space-y-6">
+          <div className="flex flex-row flex-wrap gap-8 md:flex-col md:gap-6">
             <div className="flex flex-col gap-2">
               <span className="text-[10px] font-medium text-slate-400 uppercase">
                 Status

@@ -97,7 +97,7 @@ export default function ColumnCard({
         />
       )}
 
-      <div className="custom-scrollbar grow overflow-y-auto pr-2 pb-32">
+      <div className="custom-scrollbar min-h-[100px] grow overflow-y-auto pr-2 pb-4">
         <TaskList
           tasks={tasks}
           setTasks={setTasks}
