@@ -6,7 +6,7 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import {
   DndContext,
   DragOverlay,
-  closestCorners,
+  pointerWithin,
   useSensor,
   useSensors,
   PointerSensor,
@@ -121,7 +121,6 @@ export default function SingleBoard() {
             }),
           ),
         );
-        console.log('Columns synced!');
       } catch (err) {
         console.error('Column sync failed', err);
       }
@@ -190,7 +189,6 @@ export default function SingleBoard() {
           }),
         ),
       );
-      console.log('Sync complete!');
     } catch (err) {
       console.error('Batch sync failed', err);
     }
@@ -231,7 +229,7 @@ export default function SingleBoard() {
         </div>
       ) : (
         <DndContext
-          collisionDetection={closestCorners}
+          collisionDetection={pointerWithin}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
           sensors={sensors}
