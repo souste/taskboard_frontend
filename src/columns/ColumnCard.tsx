@@ -32,7 +32,7 @@ export default function ColumnCard({
   return (
     <div
       ref={setNodeRef}
-      className={`flex max-h-[80vh] w-80 flex-col rounded-lg border bg-white p-3 shadow-sm transition-all duration-200 ${
+      className={`flex max-h-[80vh] w-[85vw] shrink-0 snap-center flex-col rounded-lg border bg-white p-3 shadow-sm transition-all duration-200 md:w-80 ${
         isOver ? 'scale-[1.01] border-slate-200 shadow-md' : 'border-slate-100'
       }`}
     >
@@ -97,7 +97,7 @@ export default function ColumnCard({
         />
       )}
 
-      <div className="custom-scrollbar grow overflow-y-auto pr-2">
+      <div className="custom-scrollbar grow overflow-y-auto pr-2 pb-32">
         <TaskList
           tasks={tasks}
           setTasks={setTasks}

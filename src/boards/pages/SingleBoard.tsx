@@ -11,6 +11,7 @@ import {
   useSensors,
   PointerSensor,
   KeyboardSensor,
+  TouchSensor,
 } from '@dnd-kit/core';
 import type { Column } from '../../types/column.types';
 import type { Task } from '../../types/task.types';
@@ -200,13 +201,19 @@ export default function SingleBoard() {
         distance: 3,
       },
     }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    }),
     useSensor(KeyboardSensor),
   );
 
   if (loading) return <p>Loading...</p>;
   if (errors) return <p>{errors}</p>;
   return (
-    <div className="custom-scrollbar flex h-screen w-full overflow-x-auto scroll-smooth bg-slate-100 p-4 md:p-10">
+    <div className="custom-scrollbar flex h-screen w-full overflow-x-auto bg-slate-100 p-2 md:p-10">
       {columns.length === 0 ? (
         <div className="flex w-full flex-col items-center justify-center space-y-4 rounded-xl border-2 border-dashed border-slate-300 p-20 text-center">
           <div className="rounded-full bg-slate-200 p-4">📋</div>
@@ -234,7 +241,7 @@ export default function SingleBoard() {
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
-          <div className="flex items-start gap-4 md:gap-6">
+          <div className="flex snap-x snap-mandatory items-start gap-4 md:gap-6">
             <Columns
               columns={columns}
               setColumns={setColumns}
