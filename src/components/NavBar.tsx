@@ -15,10 +15,10 @@ export default function NavBar() {
     <nav className="flex items-center justify-between bg-slate-900 px-8 py-4 shadow-md">
       <div className="flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded bg-indigo-500 font-bold text-white">
-          K
+          SK
         </div>
         <h1 className="text-xl font-bold tracking-tight text-white">
-          Kanban<span className="text-indigo-400">Flow</span>
+          Souste<span className="text-indigo-400">Kanban</span>
         </h1>
       </div>
 
