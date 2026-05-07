@@ -1,13 +1,21 @@
-import type { LoginData, SignupData, AuthSuccessPayload, MeResponse, ApiResponse } from "../types/auth.types";
+import type {
+  LoginData,
+  SignupData,
+  AuthSuccessPayload,
+  MeResponse,
+  ApiResponse,
+} from '../types/auth.types';
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-export const login = async (loginData: LoginData): Promise<ApiResponse<AuthSuccessPayload>> => {
+export const login = async (
+  loginData: LoginData,
+): Promise<ApiResponse<AuthSuccessPayload>> => {
   try {
     const response = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(loginData),
     });
@@ -16,22 +24,27 @@ export const login = async (loginData: LoginData): Promise<ApiResponse<AuthSucce
     if (!response.ok) {
       return {
         success: false,
-        errors: { error: result.message || "Login failed" },
+        errors: { error: result.message || 'Login failed' },
       };
     }
 
     return result;
   } catch (err) {
-    console.error("Login error", err);
-    return { success: false, errors: { error: "Network error. Please try again" } };
+    console.error('Login error', err);
+    return {
+      success: false,
+      errors: { error: 'Network error. Please try again' },
+    };
   }
 };
 
-export const signup = async (signupData: SignupData): Promise<ApiResponse<AuthSuccessPayload>> => {
+export const signup = async (
+  signupData: SignupData,
+): Promise<ApiResponse<AuthSuccessPayload>> => {
   try {
     const response = await fetch(`${API_BASE}/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(signupData),
     });
 
@@ -40,23 +53,26 @@ export const signup = async (signupData: SignupData): Promise<ApiResponse<AuthSu
     if (!response.ok) {
       return {
         success: false,
-        errors: { error: result.message || "Signup failed" },
+        errors: { error: result.message || 'Signup failed' },
       };
     }
     return result;
   } catch (err) {
-    console.error("Signup error", err);
-    return { success: false, errors: { error: "Network error. Please try again" } };
+    console.error('Signup error', err);
+    return {
+      success: false,
+      errors: { error: 'Network error. Please try again' },
+    };
   }
 };
 
 export const getMe = async (): Promise<MeResponse> => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   if (!token) {
     return {
       success: false,
-      errors: { error: "No token" },
+      errors: { error: 'No token' },
     };
   }
 
@@ -71,7 +87,7 @@ export const getMe = async (): Promise<MeResponse> => {
   if (!response.ok) {
     return {
       success: false,
-      errors: { error: result.message || "Token invalid" },
+      errors: { error: result.message || 'Token invalid' },
     };
   }
   return result;
