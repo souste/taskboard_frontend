@@ -29,3 +29,16 @@ export type AuthSuccessPayload = {
   user: SafeUser;
   token: string;
 };
+
+export type AuthContextType = {
+  user: SafeUser | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  signup: (
+    username: string,
+    email: string,
+    password: string,
+  ) => Promise<boolean>;
+  logout: () => void;
+  refreshUser: () => Promise<boolean>;
+};

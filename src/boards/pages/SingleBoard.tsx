@@ -2,7 +2,7 @@ import Columns from '../../columns/Columns';
 import { useState, useEffect } from 'react';
 import { getColumns, updateColumn } from '../../api/column';
 import { getTasks, updateTask } from '../../api/task';
-import type { DragEndEvent } from '@dnd-kit/core';
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import {
   DndContext,
   DragOverlay,
@@ -71,7 +71,7 @@ export default function SingleBoard() {
     fetchTasks();
   }, []);
 
-  const handleDragStart = (event) => {
+  const handleDragStart = (event: DragStartEvent) => {
     const id = event.active.id;
 
     const column = columns.find((c) => c.id.toString() === id);

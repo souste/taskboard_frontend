@@ -1,37 +1,6 @@
 import { useState, useEffect } from 'react';
-import type {
-  Task,
-  TaskBody,
-  ChangeEvent,
-  FormEvent,
-} from '../types/task.types';
-
-type Values = {
-  title: string;
-  description: string | null;
-  completed: boolean;
-  column_id: number | null;
-};
-
-type Task = {
-  id: number;
-  user_id: number;
-  column_id: number;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  position: number;
-  created_at: string;
-  updated_at: string;
-};
-
-type TaskFormProps = {
-  onSubmit: (values: Values) => void;
-  task: Task | null;
-  columnId: number;
-  setEditTask?: (value: boolean) => void;
-  mode?: 'create' | 'edit';
-};
+import type { TaskValues, TaskFormProps } from '../types/task.types';
+import type { ChangeEvent, FormEvent } from 'react';
 
 export default function TaskForm({
   task,
@@ -40,7 +9,7 @@ export default function TaskForm({
   columnId,
   mode = 'create',
 }: TaskFormProps) {
-  const [values, setValues] = useState<Values>({
+  const [values, setValues] = useState<TaskValues>({
     title: task?.title ?? '',
     description: task?.description ?? '',
     column_id: task?.column_id ?? columnId,
@@ -76,7 +45,7 @@ export default function TaskForm({
     }
 
     onSubmit(values);
-    setError(' ');
+    setError('');
 
     if (mode === 'create') {
       setValues({

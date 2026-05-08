@@ -10,6 +10,10 @@ export type Column = {
   created_at: string;
 };
 
+export type ColumnValues = {
+  name: string;
+};
+
 export type ColumnProps = {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
@@ -36,4 +40,10 @@ export type ColumnCardProps = {
   activeTask?: Task | null;
   dragAttributes: DraggableAttributes;
   dragListeners: SyntheticListenerMap;
+};
+
+export type ColumnFormProps = {
+  onSubmit: (values: ColumnValues) => void;
+  column?: Column | null;
+  setEditColumnId?: (value: number | null) => void;
 };

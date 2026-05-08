@@ -1,29 +1,13 @@
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
-
-type Values = {
-  name: string;
-};
-
-type Column = {
-  id: number;
-  user_id: number;
-  name: string;
-  position: number;
-  created_at: string;
-};
-type ColumnFormProps = {
-  onSubmit: (values: Values) => void;
-  column?: Column | null;
-  setEditColumnId?: (value: number | null) => void;
-};
+import type { ColumnValues, ColumnFormProps } from '../types/column.types';
 
 export default function ColumnForm({
   column,
   setEditColumnId,
   onSubmit,
 }: ColumnFormProps) {
-  const [values, setValues] = useState<Values>({
+  const [values, setValues] = useState<ColumnValues>({
     name: column?.name ?? '',
   });
 

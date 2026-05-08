@@ -28,3 +28,18 @@ export type TaskBody = {
 export type TaskCardProps = {
   task: Task;
 };
+
+export type TaskValues = {
+  title: string;
+  description: string | null;
+  completed: boolean;
+  column_id: number | null;
+};
+
+export type TaskFormProps = {
+  onSubmit: (values: TaskValues) => void;
+  task: Task | null;
+  columnId: number;
+  setEditTask?: (value: boolean) => void;
+  mode?: 'create' | 'edit';
+};
