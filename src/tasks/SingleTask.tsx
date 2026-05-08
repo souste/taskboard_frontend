@@ -96,7 +96,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
   if (errors) return <p>{errors}</p>;
 
   return (
-    <div className="flex h-full max-h-[85vh] w-full flex-col overflow-hidden md:h-[600px]">
+    <div className="flex h-full max-h-[90vh] w-full flex-col overflow-hidden md:max-h-[800px]">
       <div className="shrink-0 border-b border-slate-100 px-8 py-6">
         {!editTask ? (
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -127,7 +127,7 @@ export default function SingleTask({ taskId, refreshTasks }) {
       </div>
 
       <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
-        <div className="flex-1 overflow-y-auto px-8 py-6 pb-40">
+        <div className="flex-1 overflow-y-auto px-8 py-6 pb-10">
           {!editTask ? (
             <div className="space-y-8">
               <section>
