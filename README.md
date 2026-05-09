@@ -4,30 +4,41 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC)](https://tailwindcss.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 
-Souste Kanban is a high-performance, responsive task management application inspired by Trello and Linear. It features a robust drag-and-drop interface, real-time state synchronization, and a mobile-first design.
+Souste Kanban is a full-stack Kanban task management application inspired by tools like Trello. It features drag-and-drop task management, responsive design, secure authentication, and detailed task tracking.
 
-Backend Repository available here: https://github.com/souste/taskboard_backend
+Backend Repository: https://github.com/souste/taskboard_backend
 
 ## Demo Video
 
-To be added 🎥
+🎥 [Souste Kanban Full Demo](https://youtu.be/UlOvm154tCk)
 
 ## Tech Stack
 
-- **Frontend:** React, TypeScript, Tailwind CSS
-- **State & Context:** React Context API (Auth & Data)
-- **Drag & Drop:** @dnd-kit/core & @dnd-kit/sortable
-- **Backend:** Node.js, Express, PostgreSQL, JWT
+### Frontend
+
+- React
+- TypeScript
+- Tailwind CSS
+
+### State Management
+
+- React Context API
+
+### Drag and Drop
+
+- @dnd-kit/core
+- @dnd-kit/sortable
 
 ## Features
 
-- **Dynamic Kanban Board:** Create, update, and reorder lists and cards with an intuitive interface
-- **Advanced Drag-and-Drop:** Smooth reordering of tasks within columns and between lists using **@dnd-kit**
-- **Responsive Design:** Mobile-first layout with custom scroll-handling and **"safe-area"** padding for a native-app feel
-- **Task Details:** Dedicated task view modal for managing descriptions, completion status, and comments
-- **Type-Safe Architecture:** Fully centralized **TypeScript** definitions ensuring data consistency from database to UI
-- **User Authentication:** Secure **JWT-based** login and signup with persisted sessions via LocalStorage
-- **Form Validation:** Robust validation for task creation, column editing, and user authentication
+- Create, edit, delete, and reorder columns and tasks
+- Drag-and-drop task movement within and between columns
+- Dedicated task detail pages with descriptions and comments
+- Task completion tracking
+- Secure JWT-based authentication
+- Responsive layout for desktop and mobile devices
+- Form validation for authentication and board actions
+- Shared TypeScript types between frontend and backend
 
 ## Getting Started
 
