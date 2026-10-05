@@ -21,7 +21,7 @@ export default function ColumnCard({
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { setNodeRef, isOver } = useDroppable({
-    id: column.id.toString(),
+    id: `column-${column.id}`,
   });
 
   const confirmDelete = () => {

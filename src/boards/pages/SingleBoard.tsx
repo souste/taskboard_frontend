@@ -72,31 +72,41 @@ export default function SingleBoard() {
   }, []);
 
   const handleDragStart = (event: DragStartEvent) => {
-    const id = event.active.id;
+    setActiveTask(null);
+    setActiveColumn(null);
+    const id = event.active.id.toString();
 
-    const column = columns.find((c) => c.id.toString() === id);
-    if (column) {
-      setActiveColumn(column);
+    if (id.startsWith('column-')) {
+      const columnId = Number(id.replace('column-', ''));
+      const column = columns.find((c) => c.id === columnId);
+
+      if (column) setActiveColumn(column);
       return;
     }
 
-    const taskId = Number(id);
-    const task = tasks.find((t) => t.id === taskId);
-    if (task) setActiveTask(task);
+    if (id.startsWith('task-')) {
+      const taskId = Number(id.replace('task-', ''));
+      const task = tasks.find((t) => t.id === taskId);
+
+      if (task) setActiveTask(task);
+    }
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
     setActiveTask(null);
+    setActiveColumn(null);
     const { active, over } = event;
     if (!over) return;
 
     const activeCol = activeColumn;
     if (activeCol) {
-      setActiveColumn(null);
+      const overId = over.id.toString();
 
-      const overCol = columns.find(
-        (c) => c.id.toString() === over.id.toString(),
-      );
+      if (!overId.startsWith('column-')) return;
+
+      const overColumnId = Number(overId.replace('column-', ''));
+
+      const overCol = columns.find((c) => c.id === overColumnId);
       if (!overCol) return;
 
       const oldIndex = columns.findIndex((c) => c.id === activeCol.id);
@@ -129,18 +139,21 @@ export default function SingleBoard() {
       return;
     }
 
-    const taskId = Number(active.id);
-    const overId = over.id;
+    const taskId = Number(active.id.toString().replace('task-', ''));
+    const overId = over.id.toString();
 
     const activeTask = tasks.find((t) => t.id === taskId);
     if (!activeTask) return;
 
     let targetColumnId: number;
 
-    const overTask = tasks.find((t) => t.id.toString() === overId.toString());
-    const overColumn = columns.find(
-      (c) => c.id.toString() === overId.toString(),
-    );
+    const overTask = overId.startsWith('task-')
+      ? tasks.find((t) => t.id === Number(overId.replace('task-', '')))
+      : undefined;
+
+    const overColumn = overId.startsWith('column-')
+      ? columns.find((c) => c.id === Number(overId.replace('column-', '')))
+      : undefined;
 
     if (overTask) {
       targetColumnId = overTask.column_id;

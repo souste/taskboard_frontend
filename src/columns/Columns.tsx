@@ -58,16 +58,12 @@ export default function Columns({
     <div className="flex justify-center">
       <div className="flex gap-6">
         <SortableContext
-          items={columns.map((c) => c.id.toString())}
+          items={columns.map((c) => `column-${c.id}`)}
           strategy={horizontalListSortingStrategy}
         >
           {columns.map((column) => {
             return (
-              <SortableColumn
-                column={column}
-                key={column.id}
-                id={column.id.toString()}
-              >
+              <SortableColumn column={column} key={column.id}>
                 {({ attributes, listeners }) => (
                   <ColumnCard
                     key={column.id}

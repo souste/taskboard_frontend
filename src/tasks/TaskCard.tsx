@@ -11,7 +11,7 @@ export default function TaskCard({ task, refreshTasks }: TaskCardProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
-      id: task.id.toString(),
+      id: `task-${task.id}`,
     });
 
   const style = {

@@ -43,8 +43,8 @@ export default function TaskList({
 
   const sortableItems =
     activeTask && activeTask.column_id !== columnId
-      ? [...tasksInColumn.map((t) => t.id.toString()), activeTask.id.toString()]
-      : tasksInColumn.map((t) => t.id.toString());
+      ? [...tasksInColumn.map((t) => `task-${t.id}`), `task-${activeTask.id}`]
+      : tasksInColumn.map((t) => `task-${t.id}`);
 
   return (
     <div className="rounded-lg bg-gray-50 p-3 shadow-sm">
